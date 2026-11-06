@@ -1,0 +1,119 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화, 독립출판 작가 카카오톡"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "주인공 머리색을 더 밝게 해달라는 요청과 1장 삽화 말풍선 글씨를 모바일에서 읽히도록 키워달라는 요청 2건이며, 의상(노란 원피스)은 현행 유지 지시입니다.",
+      "total_items": 2,
+      "actionable_count": 2,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요."
+        ],
+        "request": "주인공 머리색을 현재보다 더 밝게 조정해달라는 요청입니다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상(주인공 머리색)과 방향(밝게)은 명확하지만 '좀 더'라고만 하여 밝힐 정도가 열려 있어, 현재보다 한 단계 정도만 밝게 조정하는 수준으로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요.",
+          "모바일에서 보면 너무 작아서 안 읽혀요."
+        ],
+        "request": "1장 삽화 말풍선 글씨를 모바일에서도 읽히도록 더 크게 키워달라는 요청입니다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상(1장 삽화 말풍선 글씨)과 방향(키우기) 및 목표(모바일에서 읽힘)는 명확하지만 얼마나 키울지 정도가 열려 있어, 모바일 화면에서 읽히는 수준까지 키우는 것으로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [
+        "의상은 지금 노란 원피스 그대로 두세요."
+      ],
+      "missing_information": [],
+      "notes": [
+        "유지 지시: 의상(노란 원피스)"
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 353,
+      "output": 5820,
+      "cacheRead": 3072,
+      "cacheWrite": 0,
+      "totalTokens": 9245,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 43125
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 74,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 580,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 45.4
+}

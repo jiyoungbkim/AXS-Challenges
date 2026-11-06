@@ -12,13 +12,13 @@ import {
 import * as v from 'valibot';
 import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
 import { buildResultSchema, judgmentsOf, LlmAnalysisSchema, type Judgment } from '../analysis/llm-schema.ts';
+import { ANALYSIS_MODEL, cloudflareModel, MAIN_TURN_MODEL } from '../analysis/models.ts';
 import { buildAnalysisPrompt, buildRetryPrompt, TEXT_MODE_SUFFIX } from '../analysis/prompt.ts';
 import { splitSentences } from '../analysis/sentences.ts';
 import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
 const HARNESS_TIMEOUT_MS = 180_000;
-const DEFAULT_MODEL = '@cf/zai-org/glm-4.7-flash';
 
 type Mode = 'C' | 'B';
 type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'timeout' | 'error';
@@ -175,7 +175,7 @@ async function runTextMode(harness: FlueHarness, input: AnalysisInput, options: 
 }
 
 export function AnalyzeFeedback() {
-	useModel(`cloudflare/${DEFAULT_MODEL}`);
+	useModel(cloudflareModel(MAIN_TURN_MODEL));
 	const writeAnalysis = useDataWriter('analysis');
 	const writeMeta = useDataWriter('analysis_meta');
 	const input = useInitialData<AnalyzeFeedbackInput>();
@@ -183,8 +183,8 @@ export function AnalyzeFeedback() {
 	useAgentStart(async ({ harness }) => {
 		const startedAt = Date.now();
 		// 실험용, 배포 전 제거: per-request harness model and reasoning effort.
-		const model = input.model ?? DEFAULT_MODEL;
-		const options: ModelOptions = { model: `cloudflare/${model}`, thinkingLevel: input.thinking };
+		const model = input.model ?? ANALYSIS_MODEL;
+		const options: ModelOptions = { model: cloudflareModel(model), thinkingLevel: input.thinking };
 		const run =
 			input.mode === 'C' ? await runResultMode(harness, input, options) : await runTextMode(harness, input, options);
 		if (run.analysis) writeAnalysis(run.analysis);

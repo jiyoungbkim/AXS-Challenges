@@ -73,8 +73,10 @@
 - 새 에이전트를 추가하면 `src/app.ts`에 라우트를 mount하고,
   `wrangler.jsonc` `migrations`에 `Flue<Name>Agent`를 **새 tag**로 추가한다(기존 tag 수정 금지).
 - `package.json`의 `@earendil-works/pi-*` overrides는 사용자 확인 없이 변경하지 않는다.
-- 사용 중인 모델은 `src/agents/hello.ts`의 `useModel(...)` 값이 기준이다
-  (현재 `cloudflare/@cf/zai-org/glm-4.7-flash`). Workers Free 플랜에서 막힌 모델은 403 오류가 난다.
+- 분석 에이전트의 모델은 `hoksiyo-backend/src/analysis/models.ts`의 상수가 기준이다
+  (분석(harness) `ANALYSIS_MODEL` = `@cf/zai-org/glm-5.3`, 메인 턴 `MAIN_TURN_MODEL` = `@cf/zai-org/glm-4.7-flash`).
+  모델을 바꿀 때는 이 파일만 고친다. glm-5.3은 Workers Paid가 필요하고, Free 플랜에서 막힌 모델은 403 오류가 난다.
+  (`src/agents/hello.ts`의 `useModel` 값은 예제 에이전트 전용이다.)
 - Valibot은 직접 의존성이 아니다(@flue/runtime의 간접 의존성). 직접 import하려면 먼저 package.json에 추가할지 확인한다.
 - 변경 후에는 해당 폴더의 타입 체크를 실행하고, 프론트엔드라면 린트도 실행한다.
 - 이미지 분석, 답장 작성·전송, 견적 판단, 피드백 저장·자동 대조는 MVP 범위 밖이다 (`product-spec.md` 4-6).

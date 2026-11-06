@@ -1,0 +1,122 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《작은 가게의 하루》 삽화, 출판사 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "출판사 편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "2장 삽화 하늘 색을 노을빛 주황으로 바꾸라는 명확한 수정 요청과, '여기 왼쪽 부분'이 답답해 보인다는 대상 위치와 수정 방향이 불명확한 문제 제기가 함께 있는 수정 피드백입니다.",
+      "total_items": 2,
+      "actionable_count": 1,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "2장 삽화의 하늘 색을 노을빛 주황으로 바꿔주세요."
+        ],
+        "request": "2장 삽화의 하늘 색을 노을빛 주황으로 바꿔 달라",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "high",
+        "confidence_reason": "수정 대상(2장 삽화의 하늘 색)과 바꿀 색(노을빛 주황)이 모두 원문에 명시되어 해석이 하나로 좁혀진다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 여기 왼쪽 부분이 좀 답답해 보이네요."
+        ],
+        "request": "여기 왼쪽 부분이 답답해 보이는 문제를 해소해 달라",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "low",
+        "confidence_reason": "'여기'라는 위치 지시어로 수정 대상을 특정할 수 없고 '답답해 보인다'는 문제 현상만 제시되어 수정 방법의 해석이 여러 갈래다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "시안을 보며 답답하게 보이는 왼쪽 부분이 어느 영역인지 짚어주시겠어요?",
+          "답답한 느낌을 줄이기 위해 원하시는 수정 방향을 알려주시겠어요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "'여기'가 가리키는 삽화와 '왼쪽 부분'의 정확한 영역",
+        "답답함을 줄이기 위해 원하는 수정 방향"
+      ],
+      "notes": [
+        "문장 2의 '여기'는 문장 1에 '그리고'로 이어져 있어 2장 삽화를 가리킬 가능성이 높으나 텍스트만으로는 확정할 수 없다."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 366,
+      "output": 7872,
+      "cacheRead": 3008,
+      "cacheWrite": 0,
+      "totalTokens": 11246,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 48305
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 65,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 571,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 50.5
+}
