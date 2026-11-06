@@ -23,12 +23,17 @@ app.post('/api/analyze', async (c) => {
 	const parsed = v.safeParse(AnalyzeFeedback.initialData, await c.req.json());
 	if (!parsed.success) return c.json({ error: 'invalid_input', issues: parsed.issues.map((i) => i.message) }, 400);
 	const handle = init(AnalyzeFeedback);
-	const receipt = await handle.dispatch({ message: 'analyze', initialData: parsed.output });
+	// The analysis runs in useAgentStart; this message only steers the main turn.
+	const receipt = await handle.dispatch({
+		message: "분석은 이미 완료되었습니다. '완료'라고만 답하세요.",
+		initialData: parsed.output,
+	});
 	const reply = await handle.read(receipt);
 	return c.json({
 		analysis: reply.data.analysis?.at(-1) ?? null,
 		meta: reply.data.analysis_meta?.at(-1) ?? null,
 		reply_text: reply.text, // 실험용, 배포 전 제거
+		reply_metadata: reply.metadata ?? null, // 실험용, 배포 전 제거
 	});
 });
 

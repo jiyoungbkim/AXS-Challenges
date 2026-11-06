@@ -1,10 +1,12 @@
 import type { BaseIssue } from 'valibot';
 import type { AnalysisResult } from './assemble.ts';
-import { splitSentences } from './sentences.ts';
+import type { LlmAnalysis } from './llm-schema.ts';
 
 // Checks the error conditions of docs/analysis-schema.md 6장. Conditions 6
 // (enum values) and 7 (required fields) come from the Valibot parse through
-// issuesToErrors(); 14 and 15 are reviewed by hand.
+// issuesToErrors(); 8, 12, and 16 are checked on sentence numbers by
+// validateRefs(). 13 holds by construction: only current-feedback sentences
+// are numbered. 14 and 15 are reviewed by hand.
 
 export interface AnalysisInput {
 	project_line: string;
@@ -24,14 +26,6 @@ export interface ValidationReport {
 
 const ENUM_ISSUE_TYPES = new Set(['picklist', 'enum', 'literal']);
 
-export function normalize(text: string): string {
-	return text
-		.replace(/[“”„‟″]/g, '"')
-		.replace(/[‘’‚‛′]/g, "'")
-		.replace(/\s+/g, ' ')
-		.trim();
-}
-
 function issuePath(issue: BaseIssue<unknown>): string {
 	return issue.path?.map((item) => String(item.key)).join('.') ?? '';
 }
@@ -44,6 +38,32 @@ export function issuesToErrors(issues: readonly BaseIssue<unknown>[]): Validatio
 			message: path ? `${issue.message} (at ${path})` : issue.message,
 		};
 	});
+}
+
+// Runs before assemble(): an out-of-range number cannot be turned into a sentence.
+export function validateRefs(llm: LlmAnalysis, sentenceCount: number): ValidationError[] {
+	const errors: ValidationError[] = [];
+	const refs = [
+		...llm.items.flatMap((item) => item.original_text),
+		...llm.validation.non_request_text,
+		...llm.validation.unmatched_text,
+	];
+	for (const n of refs) {
+		if (n < 1 || n > sentenceCount) {
+			errors.push({ cond: 8, message: `문장 번호 ${n}은 범위(1–${sentenceCount}) 밖입니다.` });
+		}
+	}
+	const used = new Set(refs);
+	for (let n = 1; n <= sentenceCount; n++) {
+		if (!used.has(n)) errors.push({ cond: 12, message: `문장 ${n}이 어디에도 기록되지 않았습니다.` });
+	}
+	const inItems = new Set(llm.items.flatMap((item) => item.original_text));
+	for (const n of new Set(llm.validation.non_request_text)) {
+		if (inItems.has(n)) {
+			errors.push({ cond: 16, message: `문장 ${n}이 items의 original_text와 non_request_text에 동시에 있습니다.` });
+		}
+	}
+	return errors;
 }
 
 export function validate(result: AnalysisResult, input: AnalysisInput): ValidationReport {
@@ -75,17 +95,6 @@ export function validate(result: AnalysisResult, input: AnalysisInput): Validati
 		if (item.id !== index + 1) fail(5, `items[${index}].id는 ${index + 1}이어야 합니다: ${item.id}`);
 	});
 
-	const sentences = splitSentences(input.feedback).map(normalize);
-	const sentenceSet = new Set(sentences);
-	const recorded = [
-		...items.flatMap((item) => item.original_text),
-		...validation.non_request_text,
-		...validation.unmatched_text,
-	].map(normalize);
-	for (const text of recorded) {
-		if (!sentenceSet.has(text)) fail(8, `입력 원문에 없는 문장입니다: "${text}"`);
-	}
-
 	items.forEach((item) => {
 		if (item.status === 'needs_confirmation' && item.questions.length === 0) {
 			fail(9, `항목 ${item.id}은 needs_confirmation이므로 질문이 1개 이상 있어야 합니다.`);
@@ -112,26 +121,12 @@ export function validate(result: AnalysisResult, input: AnalysisInput): Validati
 		}
 	});
 
-	const recordedSet = new Set(recorded);
-	for (const sentence of sentences) {
-		if (!recordedSet.has(sentence)) {
-			fail(12, `어디에도 기록되지 않은 원문 문장입니다: "${sentence}"`);
-		}
-	}
-
-	if (hasPrior) {
-		const priorSentences = new Set(splitSentences(input.prior_feedback ?? '').map(normalize));
-		const current = new Set(sentences);
-		for (const item of items) {
-			for (const text of item.original_text.map(normalize)) {
-				if (priorSentences.has(text) && !current.has(text)) {
-					fail(13, `항목 ${item.id}에 이전 피드백 문장이 섞였습니다: "${text}"`);
-				}
-			}
-		}
-	}
-
+	const compactFeedback = input.feedback.replace(/\s+/g, '');
 	for (const item of items) {
+		const numbers = [item.request, ...item.interpretations].flatMap((text) => text.match(/\d+(?:[.,]\d+)*/g) ?? []);
+		for (const number of new Set(numbers)) {
+			if (!compactFeedback.includes(number)) warnings.push(`항목 ${item.id}: 원문에 없는 숫자 "${number}"`);
+		}
 		if (item.confidence === 'low' && item.status === 'actionable') {
 			warnings.push(`항목 ${item.id}: low인데 actionable`);
 		}

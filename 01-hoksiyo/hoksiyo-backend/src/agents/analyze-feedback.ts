@@ -5,7 +5,7 @@ import {
 	useDataWriter,
 	useInitialData,
 	useModel,
-	usePersistentState,
+	useResponseFinish,
 	type FlueHarness,
 	type PromptUsage,
 } from '@flue/runtime';
@@ -13,7 +13,8 @@ import * as v from 'valibot';
 import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
 import { buildResultSchema, LlmAnalysisSchema } from '../analysis/llm-schema.ts';
 import { buildAnalysisPrompt, buildRetryPrompt, TEXT_MODE_SUFFIX } from '../analysis/prompt.ts';
-import { issuesToErrors, validate, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
+import { splitSentences } from '../analysis/sentences.ts';
+import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
 
@@ -97,6 +98,8 @@ function checkText(input: AnalysisInput, text: string): { analysis?: AnalysisRes
 	}
 	const parsed = v.safeParse(LlmAnalysisSchema, raw);
 	if (!parsed.success) return { errors: issuesToErrors(parsed.issues) };
+	const refErrors = validateRefs(parsed.output, splitSentences(input.feedback).length);
+	if (refErrors.length > 0) return { errors: refErrors };
 	const analysis = assemble(input, parsed.output);
 	return { analysis, errors: validate(analysis, input).errors };
 }
@@ -146,21 +149,20 @@ export function AnalyzeFeedback() {
 	const writeAnalysis = useDataWriter('analysis');
 	const writeMeta = useDataWriter('analysis_meta');
 	const input = useInitialData<AnalyzeFeedbackInput>();
-	// The harness shares this agent's system prompt, so the "reply 완료" line
-	// only appears once the analysis has run.
-	const [done, setDone] = usePersistentState('analysis_done', false);
 
 	useAgentStart(async ({ harness }) => {
-		if (done) return;
 		const startedAt = Date.now();
 		const run = input.mode === 'C' ? await runResultMode(harness, input) : await runTextMode(harness, input);
 		if (run.analysis) writeAnalysis(run.analysis);
 		writeMeta({ mode: input.mode, ...run.meta, duration_ms: Date.now() - startedAt } satisfies AnalysisMeta);
-		setDone(true);
 	});
 
-	if (done) return '분석은 이미 완료되었다. 다른 설명 없이 "완료"라고만 답하라.';
-	return '너는 수정 피드백 분석 에이전트 혹시요다. 사용자 프롬프트의 지시를 따른다.';
+	// 실험용, 배포 전 제거: records the response's own usage so the main turn's cost can be measured.
+	useResponseFinish(({ response }) => ({ response_usage: response.usage }));
+
+	// The harness shares this system prompt, so it stays neutral. The "reply 완료"
+	// instruction travels in the dispatched message, which the harness never sees.
+	return '너는 수정 피드백 분석 에이전트 혹시요다.';
 }
 
 AnalyzeFeedback.initialData = v.object({

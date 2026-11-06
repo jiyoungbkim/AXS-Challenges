@@ -1,0 +1,5 @@
+{
+  "analysis": null,
+  "meta": null,
+  "note": "curl --max-time 590 timeout (HTTP 000). Instance instance_01M6RGYSVFFCNA60AA0CFE6H4P started 2026-11-06T13:32:19Z, no settlement and no data parts by 13:45:32Z; aborted manually via POST /agents/analyze-feedback/:id/abort (settled 'aborted' 13:45:39Z). useAgentStart never wrote analysis_meta, so attempts/usage are unknown."
+}

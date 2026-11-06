@@ -1,12 +1,17 @@
 import * as v from 'valibot';
 import { assemble } from './assemble.ts';
-import { issuesToErrors, validate, type AnalysisInput, type ValidationError } from './validate.ts';
+import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from './validate.ts';
+import { splitSentences } from './sentences.ts';
 
 // The part of docs/analysis-schema.md the model fills. schema_version,
 // project.name, items[].id, and the three counts are filled by assemble().
+// Sentence fields hold 1-based numbers into splitSentences(feedback);
+// assemble() turns them back into the original sentences.
+
+const SentenceRefs = v.array(v.pipe(v.number(), v.integer()));
 
 export const ItemSchema = v.object({
-	original_text: v.array(v.string()),
+	original_text: SentenceRefs,
 	request: v.string(),
 	requester: v.string(),
 	requester_status: v.picklist(['identified', 'unconfirmed']),
@@ -29,8 +34,8 @@ export const LlmAnalysisSchema = v.object({
 	}),
 	items: v.array(ItemSchema),
 	validation: v.object({
-		unmatched_text: v.array(v.string()),
-		non_request_text: v.array(v.string()),
+		unmatched_text: SentenceRefs,
+		non_request_text: SentenceRefs,
 		missing_information: v.array(v.string()),
 		notes: v.array(v.string()),
 	}),
@@ -49,7 +54,8 @@ export function buildResultSchema(input: AnalysisInput, onAttempt: (errors: Vali
 				onAttempt(issuesToErrors(dataset.issues ?? []));
 				return;
 			}
-			const { errors } = validate(assemble(input, dataset.value), input);
+			const refErrors = validateRefs(dataset.value, splitSentences(input.feedback).length);
+			const errors = refErrors.length > 0 ? refErrors : validate(assemble(input, dataset.value), input).errors;
 			onAttempt(errors);
 			for (const error of errors) addIssue({ message: `[조건 ${error.cond}] ${error.message}` });
 		}),

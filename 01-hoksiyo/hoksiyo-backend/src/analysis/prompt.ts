@@ -13,15 +13,18 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - revision_feedback: 수정 요청이 1개 이상 있음. 범위 밖 문장(견적 문의 등)이 섞여 있어도 이 값이다.
    - no_revision_request: 칭찬·감사·의견만 있음. items는 []. summary는 "수정 요청이 없는 피드백입니다."
    - out_of_scope: 인사, 잡담, 견적·일정 문의 등 수정 피드백이 아님. items는 []. summary는 "수정 피드백이 아니어서 분석하지 않았습니다."
-2. 아래 [원문 문장 목록]의 각 문장을 수정 요청 / 유지 지시 / 이유·배경 / 칭찬 / 기타로 구분한다.
+2. 아래 [원문 문장 목록]의 각 번호 문장을 수정 요청 / 유지 지시 / 이유·배경 / 칭찬 / 기타로 구분한다.
 3. 수정 요청을 항목으로 나눈다.
-   - 한 문장에 서로 다른 수정 대상이 여럿이면(그리고, ~하고, 또) 별개 항목이다. 같은 문장을 두 항목에 모두 연결한다.
+   - 한 문장에 서로 다른 수정 대상이 여럿이면(그리고, ~하고, 또) 별개 항목이다. 같은 문장 번호를 두 항목에 모두 넣는다.
    - 요청 문장 + 이유·배경 문장 + 요구 주체를 밝힌 문장은 한 항목의 original_text에 원문 순서대로 함께 넣는다.
    - 수정 대상이 같고 방향만 다른 표현은 한 항목으로 두고 해석안으로 처리한다.
    - 요청과 같은 문장에 있는 칭찬·유지 지시는 문장을 쪼개지 않는다.
    - 독립 문장으로 된 유지 지시는 항목으로 만들지 않고 non_request_text에 넣고, notes에 "유지 지시: <대상>"으로도 기록한다.
    - 어느 항목에도 연결되지 않은 칭찬·인사·배경 문장은 non_request_text에 넣는다.
-4. original_text, non_request_text, unmatched_text에는 [원문 문장 목록]의 문장을 글자 하나 바꾸지 말고 그대로 복사한다. 모든 문장은 이 세 곳 중 하나에 반드시 들어가야 한다. 요청일 수 있으나 연결하지 못한 문장만 unmatched_text에 넣는다.
+4. original_text, non_request_text, unmatched_text에는 문장을 쓰지 말고 [원문 문장 목록]의 **문장 번호(정수)**만 넣는다. 예: "original_text": [1, 2]
+   - 모든 번호는 이 세 곳 중 하나 이상에 반드시 들어가야 한다.
+   - 항목의 original_text에 넣은 번호는 non_request_text에 다시 넣지 않는다.
+   - 요청일 수 있으나 연결하지 못한 문장 번호만 unmatched_text에 넣는다.
 5. request는 의뢰인이 말한 문제나 목표 수준으로 쓴다. 해석을 하나로 단정하지 않는다.
 6. requester와 requester_status
    - 제3자를 언급하면(마케팅팀에서, 대표님이) 그 주체, identified.
@@ -48,13 +51,15 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - 열린 질문보다 선택지가 있는 질문을 쓴다(선택지는 해석안에서). 한 질문에 하나만 묻는다. 원문에 답이 있는 것은 묻지 않는다.
    - 의뢰인에게 그대로 보낼 수 있는 존댓말로 쓴다. 위치 지시어 항목은 "시안을 보며 짚어달라"는 질문을 만든다.
 
+14. notes에는 충돌, 해석상 주의점, 유지 지시만 적는다. 해당 사항이 없으면 빈 배열 []로 둔다.
+
 [출력 JSON 형태] 모든 필드는 항상 있어야 하고 null을 쓰지 않는다. 값이 없으면 [] 또는 "unknown".
 {
   "feedback_context": { "channel": "...", "sender": "..." },
   "analysis": { "input_type": "...", "summary": "..." },
   "items": [
     {
-      "original_text": ["..."],
+      "original_text": [1],
       "request": "...",
       "requester": "...",
       "requester_status": "identified | unconfirmed",
@@ -67,7 +72,8 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
     }
   ],
   "validation": { "unmatched_text": [], "non_request_text": [], "missing_information": [], "notes": [] }
-}`;
+}
+unmatched_text와 non_request_text도 문장 번호 배열이다.`;
 
 export function buildAnalysisPrompt(input: AnalysisInput): string {
 	const sentences = splitSentences(input.feedback)
@@ -82,7 +88,7 @@ ${input.project_line}
 [피드백 원문]
 ${input.feedback}
 
-[원문 문장 목록]
+[원문 문장 목록] (번호로만 참조한다)
 ${sentences}
 
 [이전 피드백]
