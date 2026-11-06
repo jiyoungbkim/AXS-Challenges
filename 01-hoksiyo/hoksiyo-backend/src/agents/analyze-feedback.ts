@@ -17,9 +17,10 @@ import { splitSentences } from '../analysis/sentences.ts';
 import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
+const HARNESS_TIMEOUT_MS = 180_000;
 
 type Mode = 'C' | 'B';
-type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'error';
+type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'timeout' | 'error';
 
 interface Attempt {
 	n: number;
@@ -34,6 +35,7 @@ interface AnalysisMeta {
 	final_errors: ValidationError[];
 	warnings: string[];
 	usage?: PromptUsage;
+	usage_unavailable?: boolean;
 	duration_ms: number;
 }
 
@@ -55,7 +57,9 @@ async function runResultMode(harness: FlueHarness, input: AnalysisInput): Promis
 	const attempts: Attempt[] = [];
 	let failed = 0;
 	let aborted = false;
+	const timeout = AbortSignal.timeout(HARNESS_TIMEOUT_MS);
 	const call = harness.prompt(buildAnalysisPrompt(input), {
+		signal: timeout,
 		result: buildResultSchema(input, (errors) => {
 			attempts.push({ n: attempts.length + 1, errors });
 			if (errors.length > 0 && ++failed > MAX_FAILED_FINISH_CALLS) {
@@ -70,7 +74,10 @@ async function runResultMode(harness: FlueHarness, input: AnalysisInput): Promis
 		return finalize(input, assemble(input, response.data), { ...base, outcome: 'finished', usage: response.usage });
 	} catch (error) {
 		if (aborted) {
-			return { meta: { ...base, outcome: 'aborted', outcome_detail: `finish 검증 실패 ${failed}회` } };
+			return { meta: { ...base, outcome: 'aborted', outcome_detail: `finish 검증 실패 ${failed}회`, usage_unavailable: true } };
+		}
+		if (timeout.aborted) {
+			return { meta: { ...base, outcome: 'timeout', outcome_detail: `harness ${HARNESS_TIMEOUT_MS / 1000}초 초과`, usage_unavailable: true } };
 		}
 		if (error instanceof ResultUnavailableError) {
 			// Flue 2.3.0 internal wording for an exhausted follow-up loop; may change between versions.
@@ -126,13 +133,15 @@ function addUsage(a: PromptUsage | undefined, b: PromptUsage): PromptUsage {
 async function runTextMode(harness: FlueHarness, input: AnalysisInput): Promise<RunResult> {
 	const attempts: Attempt[] = [];
 	let usage: PromptUsage | undefined;
+	// One budget for the first request and the retry together.
+	const timeout = AbortSignal.timeout(HARNESS_TIMEOUT_MS);
 	try {
-		let response = await harness.prompt(buildAnalysisPrompt(input) + TEXT_MODE_SUFFIX);
+		let response = await harness.prompt(buildAnalysisPrompt(input) + TEXT_MODE_SUFFIX, { signal: timeout });
 		usage = addUsage(usage, response.usage);
 		let checked = checkText(input, response.text);
 		attempts.push({ n: 1, errors: checked.errors });
 		if (checked.errors.length > 0) {
-			response = await harness.prompt(buildRetryPrompt(checked.errors));
+			response = await harness.prompt(buildRetryPrompt(checked.errors), { signal: timeout });
 			usage = addUsage(usage, response.usage);
 			checked = checkText(input, response.text);
 			attempts.push({ n: 2, errors: checked.errors });
@@ -140,7 +149,11 @@ async function runTextMode(harness: FlueHarness, input: AnalysisInput): Promise<
 		const outcome: Outcome = checked.errors.length === 0 ? 'finished' : 'aborted';
 		return finalize(input, checked.analysis, { attempts, final_errors: checked.errors, warnings: [], outcome, usage });
 	} catch (error) {
-		return { meta: { attempts, final_errors: [], warnings: [], outcome: 'error', outcome_detail: String(error), usage } };
+		const base = { attempts, final_errors: [], warnings: [], usage };
+		if (timeout.aborted) {
+			return { meta: { ...base, outcome: 'timeout', outcome_detail: `harness ${HARNESS_TIMEOUT_MS / 1000}초 초과` } };
+		}
+		return { meta: { ...base, outcome: 'error', outcome_detail: String(error) } };
 	}
 }
 
@@ -164,6 +177,10 @@ export function AnalyzeFeedback() {
 	// instruction travels in the dispatched message, which the harness never sees.
 	return '너는 수정 피드백 분석 에이전트 혹시요다.';
 }
+
+// The 180s harness signal is the real bound: timeoutMs is only checked between
+// turns, so it backstops the whole submission including the main turn.
+AnalyzeFeedback.durability = { maxAttempts: 2, timeoutMs: 240_000 };
 
 AnalyzeFeedback.initialData = v.object({
 	project_line: v.string(),

@@ -1,4 +1,4 @@
-import { init } from '@flue/runtime';
+import { AgentRunError, init } from '@flue/runtime';
 import { createAgentRouter } from '@flue/runtime/routing';
 import { Hono } from 'hono';
 import * as v from 'valibot';
@@ -28,7 +28,21 @@ app.post('/api/analyze', async (c) => {
 		message: "분석은 이미 완료되었습니다. '완료'라고만 답하세요.",
 		initialData: parsed.output,
 	});
-	const reply = await handle.read(receipt);
+	let reply;
+	try {
+		reply = await handle.read(receipt);
+	} catch (error) {
+		// The submission itself failed (e.g. the 240s durability timeout), so no meta was written.
+		if (!(error instanceof AgentRunError)) throw error;
+		return c.json(
+			{
+				analysis: null,
+				meta: null,
+				error: { outcome: error.outcome, message: error.message, submissionId: error.submissionId },
+			},
+			504,
+		);
+	}
 	return c.json({
 		analysis: reply.data.analysis?.at(-1) ?? null,
 		meta: reply.data.analysis_meta?.at(-1) ?? null,

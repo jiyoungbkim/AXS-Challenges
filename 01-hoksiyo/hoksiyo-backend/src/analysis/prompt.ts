@@ -1,5 +1,6 @@
 // 출처: docs/analysis-rules.md. 규칙 변경 시 함께 수정
 
+import { DEGREE_EXPRESSIONS, DEICTIC_EXPRESSIONS, quoteList } from './expressions.ts';
 import { splitSentences } from './sentences.ts';
 import type { AnalysisInput, ValidationError } from './validate.ts';
 
@@ -35,7 +36,7 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - high: 수정 대상과 방향이 모두 명확하고 해석이 하나로 좁혀짐.
    - medium: 대상은 명확하지만 방법이나 정도가 열려 있음, 또는 이전 요청을 참조하는데 이전 피드백이 없어 대조할 수 없음.
    - low: 해석이 여러 갈래이거나 텍스트만으로 수정 대상을 특정할 수 없음.
-   - 의심스러우면 한 단계 낮춘다. '조금', '좀', '느낌', '분위기', '뭔가'가 있으면 high가 아니다. 지시어(여기, 이 부분)가 대상을 대신하면 low. 문제 현상만 말하고 방법이 없으면(묻혀요, 쓸쓸했으면) low.
+   - 의심스러우면 한 단계 낮춘다. ${quoteList(DEGREE_EXPRESSIONS)}가 있으면 high가 아니다. 지시어(${quoteList(DEICTIC_EXPRESSIONS)})가 있으면 low. 문제 현상만 말하고 방법이 없으면(묻혀요, 쓸쓸했으면) low.
 9. status(지금 확인 없이 작업해도 재작업 위험이 낮은가)는 confidence와 따로 판정한다.
    - low의 기본값은 needs_confirmation. high의 기본값은 actionable(충돌이 있으면 needs_confirmation).
    - medium: 정도만 열려 있고 조정이 쉬운 수정(크기, 위치, 간격)은 actionable이고, 가정한 정도를 confidence_reason에 적는다. 방법이 열려 결과가 크게 달라지면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.

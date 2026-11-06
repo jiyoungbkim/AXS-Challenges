@@ -1,11 +1,12 @@
 import type { BaseIssue } from 'valibot';
 import type { AnalysisResult } from './assemble.ts';
+import { DEGREE_EXPRESSIONS, DEICTIC_EXPRESSIONS, findExpressions, quoteList, subjectParticle } from './expressions.ts';
 import type { LlmAnalysis } from './llm-schema.ts';
 
 // Checks the error conditions of docs/analysis-schema.md 6장. Conditions 6
 // (enum values) and 7 (required fields) come from the Valibot parse through
 // issuesToErrors(); 8, 12, and 16 are checked on sentence numbers by
-// validateRefs(). 13 holds by construction: only current-feedback sentences
+// validateRefs(); 17 below. 13 holds by construction: only current-feedback sentences
 // are numbered. 14 and 15 are reviewed by hand.
 
 export interface AnalysisInput {
@@ -107,6 +108,19 @@ export function validate(result: AnalysisResult, input: AnalysisInput): Validati
 		}
 		if (item.requester_status === 'unconfirmed' && item.requester !== 'unknown') {
 			fail(10, `항목 ${item.id}: unconfirmed이면 requester는 "unknown"이어야 합니다.`);
+		}
+	});
+
+	// 17: wording caps confidence, matched per quoted sentence (see expressions.ts).
+	items.forEach((item) => {
+		const quoted = item.original_text.join(' ');
+		const degree = findExpressions(quoted, DEGREE_EXPRESSIONS);
+		if (degree.length > 0 && item.confidence === 'high') {
+			fail(17, `항목 ${item.id}의 원문에 ${quoteList(degree)}${subjectParticle(degree)} 있어 high로 판정할 수 없습니다. medium 또는 low로 다시 판정하세요.`);
+		}
+		const deictic = findExpressions(quoted, DEICTIC_EXPRESSIONS);
+		if (deictic.length > 0 && item.confidence !== 'low') {
+			fail(17, `항목 ${item.id}의 원문에 ${quoteList(deictic)}${subjectParticle(deictic)} 있어 수정 대상을 텍스트만으로 특정할 수 없습니다. low로 다시 판정하세요.`);
 		}
 	});
 
