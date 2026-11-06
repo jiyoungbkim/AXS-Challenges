@@ -70,6 +70,8 @@
   (`analysis-schema.md` 6장의 "오류" 항목과 "구현 권장" 참고). 집계값은 코드로 계산한다.
 - 스키마나 판정 규칙을 바꿔야 하면 코드를 고치기 전에 사용자에게 먼저 확인한다.
   docs/ 문서는 허락 없이 수정하지 않는다.
+- 모든 AI 호출은 `/api/analyze`를 거쳐 사용량 카운터(`UsageCounter`)를 통과해야 한다.
+  카운터를 거치지 않는 라우트나 에이전트를 추가하지 않는다.
 - 새 에이전트를 추가하면 `src/app.ts`에 라우트를 mount하고,
   `wrangler.jsonc` `migrations`에 `Flue<Name>Agent`를 **새 tag**로 추가한다(기존 tag 수정 금지).
 - `package.json`의 `@earendil-works/pi-*` overrides는 사용자 확인 없이 변경하지 않는다.

@@ -17,5 +17,19 @@
 	"migrations": [
 		{ "tag": "v1", "new_sqlite_classes": ["FlueHelloAgent"] },
 		{ "tag": "v2", "new_sqlite_classes": ["FlueAnalyzeFeedbackAgent"] },
-	]
+		{ "tag": "v3", "new_sqlite_classes": ["UsageCounter"] },
+	],
+	// Daily Neurons ledger (src/usage/usage-counter.ts). Every /api/analyze call
+	// reserves against it before any model call.
+	"durable_objects": {
+		"bindings": [{ "name": "USAGE_COUNTER", "class_name": "UsageCounter" }],
+	},
+	// Usage budget (src/usage/budget.ts). Override locally in .env; the free
+	// allocation is shared by local dev and deploys, so split it between them.
+	"vars": {
+		"DAILY_NEURON_LIMIT": "9000",
+		"USAGE_WORST_BASE": "2000",
+		"USAGE_WORST_PER_SENTENCE": "1500",
+		"USAGE_CORRECTION_FACTOR": "1.3",
+	}
 }
