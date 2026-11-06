@@ -8,7 +8,7 @@ A [Flue](https://flueframework.com) agent project.
 npm install
 ```
 
-No API key needed: the Hello agent uses the Workers AI model `@cf/zai-org/glm-5.3-flash` through the `AI` binding in `wrangler.jsonc`. Log in with `npx wrangler login`; the binding reaches your Cloudflare account even in local dev.
+No API key needed: the Hello agent uses the Workers AI model `@cf/zai-org/glm-4.7-flash` through the `AI` binding in `wrangler.jsonc`. Log in with `npx wrangler login`; the binding reaches your Cloudflare account even in local dev.
 
 `@earendil-works/pi-*` is pinned to 1.4.0 via `overrides` in `package.json` — 1.5.0 breaks `@flue/runtime` 2.3.0.
 
