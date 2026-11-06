@@ -1,0 +1,126 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "제목을 눈에 띄게 하고 저자 이름을 조금 작게 하는 두 가지 수정 요청이 있습니다.",
+      "total_items": 2,
+      "actionable_count": 1,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "제목을 더 눈에 띄게 만들어 주세요.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목을 더 굵게, 크게, 혹은 더 밝은 색으로 표현해서 눈에 띄게 할 수 있습니다.",
+          "제목 배치를 좀 더 중앙에 배치하거나, 공간을 더 확보하면 눈에 띌 수 있습니다.",
+          "제목 부분만 따로 색상을 강조하거나 폰트를 바꾸는 방식도 가능합니다."
+        ],
+        "confidence": "medium",
+        "confidence_reason": "눈에 띄게 하라는 방법과 정도가 여러 가지 가능성을 가지고 있어 명확하지 않습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목을 눈에 띄게 하기 위해, 굵게/크게/중앙 배치/색상 강조 중 어떤 방식으로 진행하면 좋을까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 조금 작게 만들어 주세요.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "저자 이름의 폰트 크기를 아주 작게 만들 것입니다.",
+          "저자 이름의 폰트 크기를 의도한 크기만큼 줄일 것입니다."
+        ],
+        "confidence": "medium",
+        "confidence_reason": "조금이라는 정도가 구체적으로 명시되어 있지 않아 결과 차이가 생길 수 있습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3464,
+      "output": 1315,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 4779,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 21651
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 51,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 557,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 22.8,
+  "_config": "glm-default",
+  "_case": "T01"
+}

@@ -1,0 +1,147 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "제목의 시선 유도와 저자 이름 크기 조절을 요청하는 피드백입니다.",
+      "total_items": 2,
+      "actionable_count": 1,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "표지의 전체 분위기는 유지하면서 제목을 눈에 띄게 만들어줌",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목으로 사람의 시선이 돌게 하기 위해 크기나 위치, 대비도 등을 조정"
+        ],
+        "confidence": "medium",
+        "confidence_reason": "요청은 명확하지만 방법(크기, 위치, 대비도 등)이 열려 있고 정도가 표류함",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "제목을 어떻게 더 눈에 띄게 할지: 1) 텍스트 크기만 키우는 것 2) 색상이나 문자 그림자 등 대비도를 높이는 것 3) 글꼴이나 스타일을 변경하는 것 중 어느 것을 우선순위로 해도 될까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 조금 더 작게 만들어줌",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [
+          "저자 이름의 글자 크기를 현재보다 조금 더 작게 조정함"
+        ],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상은 명확하지만 '조금'이라는 표현과 방법이 모호하여 저작자가 정하는 정도임",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "이전에 말씀드린 내용의 구체적인 내용"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 17,
+            "message": "항목 2의 원문에 '조금'이 있어 high로 판정할 수 없습니다. medium 또는 low로 다시 판정하세요."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "high",
+            "status": "actionable"
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [
+      "항목 1: interpretations 1개",
+      "항목 2: interpretations 1개"
+    ],
+    "outcome": "finished",
+    "usage": {
+      "input": 8344,
+      "output": 2459,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 10803,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 39679
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 85,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 591,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 41.7,
+  "_config": "glm-default",
+  "_case": "T01"
+}

@@ -1,0 +1,161 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 요청이 2개 있습니다.",
+      "total_items": 2,
+      "actionable_count": 2,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "제목이 더 눈에 띄게 수정",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "마케팅팀의 요구 문장(2)과 표현이 중복되어 같은 대상(제목)의 방향을 포괄하므로 medium 확정(조정 가능성 고려)",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 조금 더 작게 수정",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "'조금'이라는 표현이 정도를 열어두었고, 약간의 축소 가능성이 있으므로 중간 단계로 평가",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": [
+        "유지 지시: 표지 전체 분위기를 따른다(문장 1에 유지 지시가 있으나, 문장 전체를 요청 항목에 포함하였음)"
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 16,
+            "message": "문장 1이 items의 original_text와 non_request_text에 동시에 있습니다."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "errors": [
+          {
+            "cond": 9,
+            "message": "항목 1은 actionable이므로 questions가 []이어야 합니다."
+          },
+          {
+            "cond": 9,
+            "message": "항목 2은 actionable이므로 questions가 []이어야 합니다."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      },
+      {
+        "n": 3,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 57185,
+      "output": 6843,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 64028,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 153092
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 114,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 620,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 156.1,
+  "_config": "glm-default",
+  "_case": "T01"
+}

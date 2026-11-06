@@ -1,0 +1,36 @@
+{
+  "analysis": null,
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "thinking": "high",
+    "attempts": [],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "timeout",
+    "outcome_detail": "harness 180초 초과",
+    "usage_unavailable": true,
+    "duration_ms": 180012
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 108,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 614,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 183.6,
+  "_config": "glm-high",
+  "_case": "T01"
+}

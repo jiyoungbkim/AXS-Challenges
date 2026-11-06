@@ -1,0 +1,147 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《작은 가게의 하루》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "unknown",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 요청이 있는 피드백입니다.",
+      "total_items": 3,
+      "actionable_count": 3,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "제목 폰트를 명조체로 바꿔주세요."
+        ],
+        "request": "제목 폰트를 명조체로 바꿔주세요.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "제목의 폰트를 명조체로 변경한다."
+        ],
+        "confidence": "high",
+        "confidence_reason": "요청 대상(제목 폰트)과 지시 방향(명조체로)이 원문과 일치하여 명확함.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "배경색은 연한 베이지로 변경 부탁드립니다."
+        ],
+        "request": "배경색은 연한 베이지로 변경 부탁드립니다.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "배경색을 연한 베이지로 변경한다."
+        ],
+        "confidence": "medium",
+        "confidence_reason": "대상과 방향은 명확하지만 '연한'은 주관적·느낌 표현이라 상세 색상 표현 불명확하여 중간 설명.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      },
+      {
+        "id": 3,
+        "original_text": [
+          "저자 이름은 오른쪽 하단으로 옮겨주세요."
+        ],
+        "request": "저자 이름은 오른쪽 하단으로 옮겨주세요.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "저자 이름을 오른쪽 하단에 배치한다."
+        ],
+        "confidence": "high",
+        "confidence_reason": "저자 이름의 이동 목적지(오른쪽 하단)와 방향이 명확하여 높음.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "high",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [
+      "항목 1: interpretations 1개",
+      "항목 1: high인데 interpretations 있음",
+      "항목 2: interpretations 1개",
+      "항목 3: interpretations 1개",
+      "항목 3: high인데 interpretations 있음"
+    ],
+    "outcome": "finished",
+    "usage": {
+      "input": 6863,
+      "output": 4500,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 11363,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 65258
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 77,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 583,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 67.2,
+  "_config": "glm-default",
+  "_case": "T03"
+}

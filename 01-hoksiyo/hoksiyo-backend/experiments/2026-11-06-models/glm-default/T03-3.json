@@ -1,0 +1,152 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《작은 가게의 하루》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "unknown",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 요청이 3개 포함된 피드백입니다.",
+      "total_items": 3,
+      "actionable_count": 3,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "제목 폰트를 명조체로 바꿔주세요."
+        ],
+        "request": "제목 폰트를 명조체로 변경해 주십시오.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "명조체 타이포그래피로 제목 변경"
+        ],
+        "confidence": "high",
+        "confidence_reason": "각 요청마다 수정 대상과 변경 방향이 단일 명확하게 명시되어 있어.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "배경색은 연한 베이지로 변경 부탁드립니다."
+        ],
+        "request": "배경색을 연한 베이지로 변경해 주십시오.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "연한 베이지 배경색으로 적용"
+        ],
+        "confidence": "high",
+        "confidence_reason": "각 요청마다 수정 대상과 변경 방향이 단일 명확하게 명시되어 있어.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 3,
+        "original_text": [
+          "저자 이름은 오른쪽 하단으로 옮겨주세요."
+        ],
+        "request": "저자 이름을 오른쪽 하단에 배치해 주십시오.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [
+          "저자 이름의 위치를 오른쪽 하단으로 이동"
+        ],
+        "confidence": "high",
+        "confidence_reason": "각 요청마다 수정 대상과 방향이 단일 명확하게 명시되어 있어.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": [
+        "배경색은 '연한 베이지'라고 명시되었으므로, 전문 용어·자료 기반으로 실제 색은 필요시 표준 변환 표(예: 잘 정리된 베이지 변환 가이드)를 참고하여 부드럽게 구현 가능하나, 원문에는 예시가 없어 더 다듬을 필요 있음",
+        "각 요청별로 진행 가능한 단위로 구획하였음",
+        "이전 피드백이 없으므로 참조 불가"
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "high",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [
+      "항목 1: interpretations 1개",
+      "항목 1: high인데 interpretations 있음",
+      "항목 2: interpretations 1개",
+      "항목 2: high인데 interpretations 있음",
+      "항목 3: interpretations 1개",
+      "항목 3: high인데 interpretations 있음"
+    ],
+    "outcome": "finished",
+    "usage": {
+      "input": 8920,
+      "output": 1916,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 10836,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 28980
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 198,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 704,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 33.3,
+  "_config": "glm-default",
+  "_case": "T03"
+}

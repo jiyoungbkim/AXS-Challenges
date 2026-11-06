@@ -1,0 +1,133 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "제목이 배경에 묻혀 더 눈에 띄게 해 달라는 요청(마케팅팀 의견 전달)과 저자 이름을 조금 작게 해 달라는 요청 두 건입니다. 저자 이름 요청은 이전 피드백을 참조하지만 이전 피드백이 제공되지 않았습니다.",
+      "total_items": 2,
+      "actionable_count": 0,
+      "confirmation_count": 2
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "제목이 배경에 묻히지 않고 더 눈에 띄도록 수정해야 합니다.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목 글자 크기를 키워 강조한다.",
+          "제목의 색상이나 배경과의 대비를 높여 눈에 띄게 한다.",
+          "제목의 위치를 눈에 잘 띄는 자리로 옮긴다.",
+          "제목 주변 배경을 정리하거나 강조 효과를 더해 가독성을 높인다."
+        ],
+        "confidence": "low",
+        "confidence_reason": "제목이라는 대상은 명확하지만 '묻히는 느낌'이라는 문제 현상만 제시되고 구체적 수정 방법이 없어 해석이 여러 갈래로 열려 있습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목을 강조하는 방법으로 글자 크기 키우기, 색상·대비 조정, 위치 이동 중 어느 방향을 원하시나요?",
+          "마케팅팀에서 전달하신 구체적인 수정 방향이 따로 있을까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 현재보다 조금 작게 조정해야 합니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름을 작게 한다는 대상과 방향은 명확하지만 '조금'이라는 정도가 열려 있고, 참조하는 이전 피드백이 제공되지 않아 대조할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "저번에 말씀하신 저자 이름 크기 기준을 다시 알려주시겠어요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "제목을 눈에 띄게 만들 구체적 수정 방법(크기, 색상·대비, 위치 등)",
+        "문장 3이 참조하는 저자 이름 크기 관련 이전 피드백 원문"
+      ],
+      "notes": [
+        "문장 1에서 전체 분위기를 좋다고 언급했으므로, 제목 강조 작업 시 전체 분위기는 크게 바꾸지 않는 것이 안전합니다.",
+        "문장 3은 이전 피드백을 참조하나 이전 피드백이 제공되지 않아 대조할 수 없습니다."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 101,
+      "output": 11325,
+      "cacheRead": 3328,
+      "cacheWrite": 0,
+      "totalTokens": 14754,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 71300
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 64,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 570,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 73.4,
+  "_config": "glm-5.3",
+  "_case": "T01"
+}

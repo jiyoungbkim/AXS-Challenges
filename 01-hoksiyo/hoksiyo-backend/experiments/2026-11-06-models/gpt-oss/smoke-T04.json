@@ -1,0 +1,50 @@
+{
+  "analysis": null,
+  "meta": {
+    "mode": "C",
+    "model": "@cf/openai/gpt-oss-120b",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 17,
+            "message": "항목 1의 원문에 '조금'이 있어 high로 판정할 수 없습니다. medium 또는 low로 다시 판정하세요."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "error",
+    "outcome_detail": "FlueError: prompt failed: Cloudflare AI binding request failed with 400 Bad Request: {\"name\":\"AiError\",\"internalCode\":5006,\"httpCode\":400,\"message\":\"AiError: Bad input: Error: oneOf at '/' not met, 0 matches: required properties at '/' are 'prompt', Type mismatch of '/messages/0/content', 'array' not in 'string', Type mismatch of '/messages/1/content', 'string' not in 'array', Type mismatch of '/messages/2/content', 'array' not in 'string', Type mismatch of '/messages/3/content', 'array' not in 'string', Type mismatch of '/messages/4/content', 'array' not in 'string', Type mismatch of '/messages/5/content', 'string' not in 'null', required properties at '/messages/5' are 'role,content', oneOf at '/' not met, 0 matches, required properties at '/' are 'input', required properties at '/' are 'requests' (5279be00-f473-4e6f-91af-93eaeb946ffe)\",\"description\":\"Error: oneOf at '/' not met, 0 matches: required properties at '/' are 'prompt', Type mismatch of '/messages/0/content', 'array' not in 'string', Type mismatch of '/messages/1/content', 'string' not in 'array', Type mismatch of '/messages/2/content', 'array' not in 'string', Type mismatch of '/messages/3/content', 'array' not in 'string', Type mismatch of '/messages/4/content', 'array' not in 'string', Type mismatch of '/messages/5/content', 'string' not in 'null', required properties at '/messages/5' are 'role,content', oneOf at '/' not met, 0 matches, required properties at '/' are 'input', required properties at '/' are 'requests'\",\"requestId\":\"5279be00-f473-4e6f-91af-93eaeb946ffe\"}",
+    "duration_ms": 151169
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 60,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 566,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 155.5,
+  "_config": "gpt-oss",
+  "_case": "T04"
+}

@@ -1,0 +1,98 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 요청이 있습니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "저자 이름을 조금 더 작게 해주세요",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "정도가 '조금'이라 명확도가 낮습니다",
+        "status": "actionable",
+        "prior_feedback_reference": "not_provided",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "thinking": "high",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3321,
+      "output": 915,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 4236,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 13610
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 82,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 588,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 15.3,
+  "_config": "glm-high",
+  "_case": "T04"
+}

@@ -11,13 +11,14 @@ import {
 } from '@flue/runtime';
 import * as v from 'valibot';
 import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
-import { buildResultSchema, LlmAnalysisSchema } from '../analysis/llm-schema.ts';
+import { buildResultSchema, judgmentsOf, LlmAnalysisSchema, type Judgment } from '../analysis/llm-schema.ts';
 import { buildAnalysisPrompt, buildRetryPrompt, TEXT_MODE_SUFFIX } from '../analysis/prompt.ts';
 import { splitSentences } from '../analysis/sentences.ts';
 import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
 const HARNESS_TIMEOUT_MS = 180_000;
+const DEFAULT_MODEL = '@cf/zai-org/glm-4.7-flash';
 
 type Mode = 'C' | 'B';
 type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'timeout' | 'error';
@@ -25,10 +26,14 @@ type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'timeout' | 'e
 interface Attempt {
 	n: number;
 	errors: ValidationError[];
+	// Item judgments as submitted, before any rejection; null when the base schema failed.
+	judgments: Judgment[] | null;
 }
 
 interface AnalysisMeta {
 	mode: Mode;
+	model: string;
+	thinking?: Thinking;
 	outcome: Outcome;
 	outcome_detail?: string;
 	attempts: Attempt[];
@@ -41,10 +46,17 @@ interface AnalysisMeta {
 
 interface RunResult {
 	analysis?: AnalysisResult;
-	meta: Omit<AnalysisMeta, 'mode' | 'duration_ms'>;
+	meta: Omit<AnalysisMeta, 'mode' | 'model' | 'thinking' | 'duration_ms'>;
 }
 
-type AnalyzeFeedbackInput = AnalysisInput & { mode: Mode };
+type Thinking = 'low' | 'medium' | 'high';
+
+interface ModelOptions {
+	model: string;
+	thinkingLevel?: Thinking;
+}
+
+type AnalyzeFeedbackInput = AnalysisInput & { mode: Mode; model?: string; thinking?: Thinking };
 
 function finalize(input: AnalysisInput, analysis: AnalysisResult | undefined, meta: RunResult['meta']): RunResult {
 	if (!analysis) return { meta };
@@ -53,15 +65,16 @@ function finalize(input: AnalysisInput, analysis: AnalysisResult | undefined, me
 }
 
 // C: harness.prompt with a result schema; invariants are checked in the finish tool.
-async function runResultMode(harness: FlueHarness, input: AnalysisInput): Promise<RunResult> {
+async function runResultMode(harness: FlueHarness, input: AnalysisInput, options: ModelOptions): Promise<RunResult> {
 	const attempts: Attempt[] = [];
 	let failed = 0;
 	let aborted = false;
 	const timeout = AbortSignal.timeout(HARNESS_TIMEOUT_MS);
 	const call = harness.prompt(buildAnalysisPrompt(input), {
+		...options,
 		signal: timeout,
-		result: buildResultSchema(input, (errors) => {
-			attempts.push({ n: attempts.length + 1, errors });
+		result: buildResultSchema(input, (errors, judgments) => {
+			attempts.push({ n: attempts.length + 1, errors, judgments });
 			if (errors.length > 0 && ++failed > MAX_FAILED_FINISH_CALLS) {
 				aborted = true;
 				call.abort();
@@ -96,19 +109,23 @@ function parseJson(text: string): unknown {
 	return JSON.parse(unfenced.slice(start, end + 1));
 }
 
-function checkText(input: AnalysisInput, text: string): { analysis?: AnalysisResult; errors: ValidationError[] } {
+function checkText(
+	input: AnalysisInput,
+	text: string,
+): { analysis?: AnalysisResult; errors: ValidationError[]; judgments: Judgment[] | null } {
 	let raw: unknown;
 	try {
 		raw = parseJson(text);
 	} catch (error) {
-		return { errors: [{ cond: 'parse', message: error instanceof Error ? error.message : String(error) }] };
+		return { errors: [{ cond: 'parse', message: error instanceof Error ? error.message : String(error) }], judgments: null };
 	}
 	const parsed = v.safeParse(LlmAnalysisSchema, raw);
-	if (!parsed.success) return { errors: issuesToErrors(parsed.issues) };
+	if (!parsed.success) return { errors: issuesToErrors(parsed.issues), judgments: null };
+	const judgments = judgmentsOf(parsed.output);
 	const refErrors = validateRefs(parsed.output, splitSentences(input.feedback).length);
-	if (refErrors.length > 0) return { errors: refErrors };
+	if (refErrors.length > 0) return { errors: refErrors, judgments };
 	const analysis = assemble(input, parsed.output);
-	return { analysis, errors: validate(analysis, input).errors };
+	return { analysis, errors: validate(analysis, input).errors, judgments };
 }
 
 function addUsage(a: PromptUsage | undefined, b: PromptUsage): PromptUsage {
@@ -130,21 +147,21 @@ function addUsage(a: PromptUsage | undefined, b: PromptUsage): PromptUsage {
 }
 
 // B: plain text JSON, parsed and validated in code, re-requested once on failure.
-async function runTextMode(harness: FlueHarness, input: AnalysisInput): Promise<RunResult> {
+async function runTextMode(harness: FlueHarness, input: AnalysisInput, options: ModelOptions): Promise<RunResult> {
 	const attempts: Attempt[] = [];
 	let usage: PromptUsage | undefined;
 	// One budget for the first request and the retry together.
 	const timeout = AbortSignal.timeout(HARNESS_TIMEOUT_MS);
 	try {
-		let response = await harness.prompt(buildAnalysisPrompt(input) + TEXT_MODE_SUFFIX, { signal: timeout });
+		let response = await harness.prompt(buildAnalysisPrompt(input) + TEXT_MODE_SUFFIX, { ...options, signal: timeout });
 		usage = addUsage(usage, response.usage);
 		let checked = checkText(input, response.text);
-		attempts.push({ n: 1, errors: checked.errors });
+		attempts.push({ n: 1, errors: checked.errors, judgments: checked.judgments });
 		if (checked.errors.length > 0) {
-			response = await harness.prompt(buildRetryPrompt(checked.errors), { signal: timeout });
+			response = await harness.prompt(buildRetryPrompt(checked.errors), { ...options, signal: timeout });
 			usage = addUsage(usage, response.usage);
 			checked = checkText(input, response.text);
-			attempts.push({ n: 2, errors: checked.errors });
+			attempts.push({ n: 2, errors: checked.errors, judgments: checked.judgments });
 		}
 		const outcome: Outcome = checked.errors.length === 0 ? 'finished' : 'aborted';
 		return finalize(input, checked.analysis, { attempts, final_errors: checked.errors, warnings: [], outcome, usage });
@@ -158,16 +175,26 @@ async function runTextMode(harness: FlueHarness, input: AnalysisInput): Promise<
 }
 
 export function AnalyzeFeedback() {
-	useModel('cloudflare/@cf/zai-org/glm-4.7-flash');
+	useModel(`cloudflare/${DEFAULT_MODEL}`);
 	const writeAnalysis = useDataWriter('analysis');
 	const writeMeta = useDataWriter('analysis_meta');
 	const input = useInitialData<AnalyzeFeedbackInput>();
 
 	useAgentStart(async ({ harness }) => {
 		const startedAt = Date.now();
-		const run = input.mode === 'C' ? await runResultMode(harness, input) : await runTextMode(harness, input);
+		// 실험용, 배포 전 제거: per-request harness model and reasoning effort.
+		const model = input.model ?? DEFAULT_MODEL;
+		const options: ModelOptions = { model: `cloudflare/${model}`, thinkingLevel: input.thinking };
+		const run =
+			input.mode === 'C' ? await runResultMode(harness, input, options) : await runTextMode(harness, input, options);
 		if (run.analysis) writeAnalysis(run.analysis);
-		writeMeta({ mode: input.mode, ...run.meta, duration_ms: Date.now() - startedAt } satisfies AnalysisMeta);
+		writeMeta({
+			mode: input.mode,
+			model,
+			thinking: input.thinking,
+			...run.meta,
+			duration_ms: Date.now() - startedAt,
+		} satisfies AnalysisMeta);
 	});
 
 	// 실험용, 배포 전 제거: records the response's own usage so the main turn's cost can be measured.
@@ -187,4 +214,6 @@ AnalyzeFeedback.initialData = v.object({
 	feedback: v.string(),
 	prior_feedback: v.optional(v.string()),
 	mode: v.picklist(['C', 'B']), // 실험용, 배포 전 제거
+	model: v.optional(v.string()), // 실험용, 배포 전 제거
+	thinking: v.optional(v.picklist(['low', 'medium', 'high'])), // 실험용, 배포 전 제거
 });

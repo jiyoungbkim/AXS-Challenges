@@ -1,0 +1,35 @@
+{
+  "analysis": null,
+  "meta": {
+    "mode": "C",
+    "model": "@cf/meta/llama-4-scout-17b-16e-instruct",
+    "attempts": [],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "timeout",
+    "outcome_detail": "harness 180초 초과",
+    "usage_unavailable": true,
+    "duration_ms": 180009
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 39,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 545,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 181.7,
+  "_config": "scout",
+  "_case": "T04"
+}

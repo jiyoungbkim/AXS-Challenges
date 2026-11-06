@@ -1,0 +1,107 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "unknown",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "저자 이름 크기 조절 요청이 있다.",
+      "total_items": 1,
+      "actionable_count": 0,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "저자 이름의 크기를 조금 작게",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상(저자 이름)은 명확하지만, '조금'이라는 정도가 주관적이어서 명확성이 높지 않습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "스캔하거나 전송한 시안에 저자 이름이 표시되어 있나요?",
+          "여백이나 다른 요소와 변화할 게 아니라, 저자 이름 하나의 크기와 관계인가요?",
+          "크기 조절이라면, 기존 저자 이름 폰트 대비 실제로 통상적으로 몇 % 더 작은 크기일까요?",
+          "가로·세로 비율을 따로 지정해달라는 의미인가요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "'조금'이라는 정도를 명확히 하려면, 시안이나 원본 이미지를 같이 보고 요청 정도(%)를 질문해야 합니다.",
+        "시안 이미지가 있다면 저자 이름 변화 전/후 비교가 가능합니다."
+      ],
+      "notes": [
+        "'저자 이름만'은 여백이나 다른 요소는 건드리지 말라는 뜻이라 추측됩니다. 즉, 원 문장에도 포함함."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3321,
+      "output": 1018,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 4339,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 15735
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 72,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 578,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 17.4,
+  "_config": "glm-default",
+  "_case": "T04"
+}

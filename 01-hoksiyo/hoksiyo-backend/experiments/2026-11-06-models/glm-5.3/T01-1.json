@@ -1,0 +1,128 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "표지 제목이 묻혀 좀 더 눈에 띄게 해 달라는 요청(마케팅팀 요구)과 저자 이름을 조금 작게 해 달라는 재요청이 있으며, 표지 전체 분위기는 좋다는 평가가 같은 문장에 담겨 있다.",
+      "total_items": 2,
+      "actionable_count": 0,
+      "confirmation_count": 2
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "제목이 배경에 묻혀 잘 보이지 않으니 마케팅팀이 원하는 대로 좀 더 눈에 띄게 수정해 달라.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목 글자 크기를 키워 눈에 띄게 하기",
+          "제목과 배경의 색·명암 대비를 높이기",
+          "제목 위치를 더 돋보이는 곳으로 옮기기"
+        ],
+        "confidence": "low",
+        "confidence_reason": "수정 대상은 제목으로 명확하지만 '묻히는 느낌'이라는 문제 현상만 말하고 구체적 방법을 제시하지 않아 해석이 여러 갈래로 열려 있다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목을 더 눈에 띄게 하려면 글자 크기 키우기, 배경과의 대비 높이기, 위치 이동 중 어느 방향으로 수정하면 좋을까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저번에 말씀했다는 대로 저자 이름 글자를 조금 작게 줄여 달라.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름을 작게 한다는 방향은 명확하지만 줄이는 정도가 '조금'으로 열려 있고, 참조하는 '저번' 피드백이 제공되지 않아 대조할 수 없다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "저번에 말씀하신 저자 이름 크기 관련 내용을 이번 메일에 다시 알려주시겠어요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "저자 이름 크기와 관련해 '저번에 말씀드린' 이전 피드백 내용",
+        "제목을 눈에 띄게 할 구체적인 방향(크기, 대비, 위치 등)"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 421,
+      "output": 15052,
+      "cacheRead": 3008,
+      "cacheWrite": 0,
+      "totalTokens": 18481,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 87527
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 53,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 559,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 89.8,
+  "_config": "glm-5.3",
+  "_case": "T01"
+}

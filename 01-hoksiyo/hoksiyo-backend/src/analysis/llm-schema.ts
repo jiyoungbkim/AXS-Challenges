@@ -43,20 +43,32 @@ export const LlmAnalysisSchema = v.object({
 
 export type LlmAnalysis = v.InferOutput<typeof LlmAnalysisSchema>;
 
+export interface Judgment {
+	confidence: string;
+	status: string;
+}
+
+export function judgmentsOf(llm: LlmAnalysis): Judgment[] {
+	return llm.items.map((item) => ({ confidence: item.confidence, status: item.status }));
+}
+
 // The `finish` schema for harness.prompt. The rawCheck runs on every finish
 // call, even when the base object fails, so each call is reported to
 // `onAttempt` once. Invariant failures go back to the model as finish errors.
-export function buildResultSchema(input: AnalysisInput, onAttempt: (errors: ValidationError[]) => void) {
+export function buildResultSchema(
+	input: AnalysisInput,
+	onAttempt: (errors: ValidationError[], judgments: Judgment[] | null) => void,
+) {
 	return v.pipe(
 		LlmAnalysisSchema,
 		v.rawCheck(({ dataset, addIssue }) => {
 			if (!dataset.typed) {
-				onAttempt(issuesToErrors(dataset.issues ?? []));
+				onAttempt(issuesToErrors(dataset.issues ?? []), null);
 				return;
 			}
 			const refErrors = validateRefs(dataset.value, splitSentences(input.feedback).length);
 			const errors = refErrors.length > 0 ? refErrors : validate(assemble(input, dataset.value), input).errors;
-			onAttempt(errors);
+			onAttempt(errors, judgmentsOf(dataset.value));
 			for (const error of errors) addIssue({ message: `[조건 ${error.cond}] ${error.message}` });
 		}),
 	);

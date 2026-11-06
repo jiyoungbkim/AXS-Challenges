@@ -1,0 +1,99 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "unknown",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 요청이 포함된 피드백입니다.",
+      "total_items": 1,
+      "actionable_count": 0,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "저자 이름의 글자 크기를 조금 작게 해주세요.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상은 명확하지만 정도가 '조금'이라 명확하지 않아 medium임.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "조금 얼마만큼 작게 해드릴까요? (크기, 굵기, 간격 등의 구체적 수준 조언)"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-4.7-flash",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3321,
+      "output": 1369,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 4690,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 25438
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 112,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 618,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 28.3,
+  "_config": "glm-default",
+  "_case": "T04"
+}

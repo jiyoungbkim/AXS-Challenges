@@ -1,0 +1,99 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "《밤의 정원》 표지의 저자 이름 글자 크기를 조금 작게 줄여달라는 수정 요청 1건입니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "표지의 저자 이름 글자 크기를 현재보다 조금 작게 조정해 달라는 요청입니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상(저자 이름)과 방향(크기 축소)은 명확하지만 '조금'이라는 표현으로 축소 정도가 열려 있어 medium이며, 현재 크기에서 소폭 줄이는 수준으로 조정 가능하다고 가정합니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": [
+        "유지 지시: 저자 이름 외 표지 요소는 변경 없이 유지(문장 1의 '만'에 내포된 제한)."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 86,
+      "output": 3644,
+      "cacheRead": 3200,
+      "cacheWrite": 0,
+      "totalTokens": 6930,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 16018
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 41,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 547,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "_http": "200",
+  "_elapsed_s": 17.1,
+  "_config": "glm-5.3",
+  "_case": "T04"
+}
