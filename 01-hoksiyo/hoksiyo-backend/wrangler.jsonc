@@ -14,5 +14,8 @@
 	// (Hello -> FlueHelloAgent), and Cloudflare requires a migration entry
 	// for each one. Append a new tag when you add an agent:
 	// https://flueframework.com/docs/guide/cloudflare-target/#managing-migrations
-	"migrations": [{ "tag": "v1", "new_sqlite_classes": ["FlueHelloAgent"] }]
+	"migrations": [
+		{ "tag": "v1", "new_sqlite_classes": ["FlueHelloAgent"] },
+		{ "tag": "v2", "new_sqlite_classes": ["FlueAnalyzeFeedbackAgent"] },
+	]
 }
