@@ -2,9 +2,11 @@ import { ratesFor } from '../analysis/models.ts';
 
 // Daily Neurons budget. Every value can be set per environment (wrangler.jsonc
 // `vars` for deploys, `.env` for local dev); the defaults below apply otherwise.
-// The worst-case coefficients fit the glm-5.3 runs in experiments/ (W(n) covers
-// every observed run with n sentences); the correction factor scales recorded
-// usage up to what the Cloudflare dashboard billed (60.59k vs 47.9k recorded).
+// The worst-case coefficients are about 4.7x the glm-5.3 thinking-low runs in
+// experiments/2026-11-07-thinking-low (only two samples), so W(n) plus the
+// 1,000 Neurons between the limit and the free 10,000 also covers a run as long
+// as the medium ones. Recorded usage matched the Cloudflare dashboard on
+// 2026-11-07, so the correction factor is 1.
 
 export interface UsageEnv {
 	DAILY_NEURON_LIMIT?: string;
@@ -20,7 +22,7 @@ export interface UsageConfig {
 	correction: number;
 }
 
-const DEFAULTS: UsageConfig = { dailyLimit: 9_000, worstBase: 2_000, worstPerSentence: 1_500, correction: 1.3 };
+const DEFAULTS: UsageConfig = { dailyLimit: 9_000, worstBase: 2_000, worstPerSentence: 1_000, correction: 1 };
 
 function positive(value: string | undefined, fallback: number, name: string): number {
 	if (value === undefined || value.trim() === '') return fallback;

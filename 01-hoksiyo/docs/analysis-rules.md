@@ -127,7 +127,7 @@
 - 요구 주체가 제3자인 것만으로 confidence를 올리거나 내리지 않는다.
 - `identified`이면 `requester`는 `"unknown"`이 아니고, `unconfirmed`이면 `"unknown"`이다.
 - 근거 없이 추측하지 않는다.
-- `channel`과 `sender`는 프로젝트 설명 한 줄(예: `편집자 메일`)과 원문에서 근거가 있을 때만 채우고, 없으면 `unknown`이다.
+- `channel`과 `sender`는 입력값(선택 입력 `channel`, `sender`)으로 채우고, 입력이 없으면 `unknown`이다. 원문에서 추출하지 않는다.
 
 ## 8. 예외 입력 처리
 

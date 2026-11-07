@@ -20,7 +20,7 @@ The keyless `cloudflare/` provider only exists inside the Worker, so `flue run` 
 npm run dev
 curl -X POST http://localhost:5173/api/analyze \
   -H 'content-type: application/json' \
-  -d '{"project_line":"《밤의 정원》 표지, 편집자 메일","feedback":"저자 이름만 조금 작게 해주세요.","mode":"C"}'
+  -d '{"project_name":"《밤의 정원》 표지","sender":"편집자","channel":"email","feedback":"저자 이름만 조금 작게 해주세요.","mode":"C"}'
 curl http://localhost:5173/api/usage   # today's Neurons usage and limit
 ```
 

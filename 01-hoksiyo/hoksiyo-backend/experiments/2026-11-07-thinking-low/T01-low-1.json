@@ -1,0 +1,152 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지, 편집자 메일"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "unknown"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "표지 제목이 눈에 띄지 않는 문제와 저자 이름 크기 축소 요청 두 건입니다.",
+      "total_items": 2,
+      "actionable_count": 0,
+      "confirmation_count": 2
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "표지 제목이 배경에 묻혀 잘 안 보이니 마케팅팀의 바람대로 더 눈에 띄게 해달라는 요청입니다.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목의 크기를 키우거나 굵기를 조정해 가독성을 높인다",
+          "제목의 색이나 명암 대비를 강화해 배경에서 분리시킨다",
+          "제목 주변 요소를 정리해 제목이 돋보이게 배치를 조정한다"
+        ],
+        "confidence": "low",
+        "confidence_reason": "제목이 묵힌다는 문제 현상만 있고 구체적 수정 방법이 제시되지 않아 해석이 여러 갈래입니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목이 더 눈에 띄도록 크기·굵기 조정, 색·대비 변경, 배치 정리 중 어떤 방향으로 손보면 좋을까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름 표기를 지금보다 조금 작게 해달라는 요청입니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름을 작게 하는 대상은 명확하지만 '조금'이라는 정도와 '저번에 말씀드린 대로'라는 이전 요청을 대조할 이전 피드백이 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "저자 이름을 어느 정도 크기까지 줄이면 좋을까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "문장 3이 참조하는 이전 피드백(저자 이름 크기 관련 이전 요청)이 제공되지 않았습니다."
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 10,
+            "message": "항목 2: identified인데 requester가 \"unknown\"입니다."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3378,
+      "output": 1295,
+      "cacheRead": 4224,
+      "cacheWrite": 0,
+      "totalTokens": 8897,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 9999
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 127,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 633,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 1372,
+    "basis": "measured",
+    "daily_used": 2173,
+    "daily_limit": 9900
+  },
+  "_http": "200",
+  "_elapsed_s": 13.22,
+  "_started_utc": "14:02:02"
+}

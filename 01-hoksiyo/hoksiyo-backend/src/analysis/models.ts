@@ -5,6 +5,12 @@
 // credits); chosen from experiments/2026-11-06-models.
 export const ANALYSIS_MODEL = '@cf/zai-org/glm-5.3';
 
+// Reasoning effort for the harness (Flue sends it as reasoning_effort). low cut
+// glm-5.3's output tokens by 82-91% against the default medium with the same
+// key judgments (experiments/2026-11-07-thinking-low).
+export type Thinking = 'low' | 'medium' | 'high';
+export const ANALYSIS_THINKING: Thinking = 'low';
+
 // Answers the main turn ("완료"), which needs no judgment.
 export const MAIN_TURN_MODEL = '@cf/zai-org/glm-4.7-flash';
 
@@ -15,7 +21,7 @@ export function cloudflareModel(id: string): string {
 // Neurons per million tokens (developers.cloudflare.com/workers-ai/platform/pricing,
 // 2026-11-06) and the fastest output rate seen in experiments/, used to estimate
 // a run that ended without usage. glm-5.3's cached-input rate comes from pi-ai's
-// catalog ($0.26/M); Cloudflare's own figure is unconfirmed.
+// catalog ($0.26/M) and matched the Cloudflare dashboard on 2026-11-07.
 export interface ModelRates {
 	inputPerM: number;
 	cachedPerM: number;

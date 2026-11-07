@@ -9,8 +9,13 @@ import type { LlmAnalysis } from './llm-schema.ts';
 // validateRefs(); 17 below. 13 holds by construction: only current-feedback sentences
 // are numbered. 14 and 15 are reviewed by hand.
 
+export type Channel = 'email' | 'messenger' | 'document';
+
 export interface AnalysisInput {
-	project_line: string;
+	project_name: string;
+	// Who passed the feedback on, and how. Filled into feedback_context by code.
+	sender?: string;
+	channel?: Channel;
 	feedback: string;
 	prior_feedback?: string;
 }

@@ -1,5 +1,6 @@
 // 출처: docs/analysis-rules.md. 규칙 변경 시 함께 수정
 
+import { senderOf } from './assemble.ts';
 import { DEGREE_EXPRESSIONS, DEICTIC_EXPRESSIONS, quoteList } from './expressions.ts';
 import { splitSentences } from './sentences.ts';
 import type { AnalysisInput, ValidationError } from './validate.ts';
@@ -29,34 +30,32 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
 5. request는 의뢰인이 말한 문제나 목표 수준으로 쓴다. 해석을 하나로 단정하지 않는다.
 6. requester와 requester_status
    - 제3자를 언급하면(마케팅팀에서, 대표님이) 그 주체, identified.
-   - 제3자 언급 없이 전달자 본인의 의견이고 sender를 알면 sender와 같게, identified.
-   - 근거가 없으면 "unknown", unconfirmed.
-7. feedback_context: channel(email/messenger/document/unknown)과 sender는 프로젝트 설명과 원문에 근거가 있을 때만 채운다. 없으면 "unknown". 카카오톡·DM은 messenger다.
-8. confidence(해석의 명확성)
+   - 제3자 언급 없이 전달자 본인의 의견이고 [프로젝트]의 전달자를 알면 그 전달자 값을 그대로 쓰고, identified.
+   - 근거가 없거나 전달자가 "알 수 없음"이면 "unknown", unconfirmed.
+7. confidence(해석의 명확성)
    - high: 수정 대상과 방향이 모두 명확하고 해석이 하나로 좁혀짐.
    - medium: 대상은 명확하지만 방법이나 정도가 열려 있음, 또는 이전 요청을 참조하는데 이전 피드백이 없어 대조할 수 없음.
    - low: 해석이 여러 갈래이거나 텍스트만으로 수정 대상을 특정할 수 없음.
    - 의심스러우면 한 단계 낮춘다. ${quoteList(DEGREE_EXPRESSIONS)}가 있으면 high가 아니다. 지시어(${quoteList(DEICTIC_EXPRESSIONS)})가 있으면 low. 문제 현상만 말하고 방법이 없으면(묻혀요, 쓸쓸했으면) low.
-9. status(지금 확인 없이 작업해도 재작업 위험이 낮은가)는 confidence와 따로 판정한다.
+8. status(지금 확인 없이 작업해도 재작업 위험이 낮은가)는 confidence와 따로 판정한다.
    - low의 기본값은 needs_confirmation. high의 기본값은 actionable(충돌이 있으면 needs_confirmation).
    - medium: 정도만 열려 있고 조정이 쉬운 수정(크기, 위치, 간격)은 actionable이고, 가정한 정도를 confidence_reason에 적는다. 방법이 열려 결과가 크게 달라지면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.
-10. confidence_reason은 한 문장으로 왜 그 값인지 쓴다.
-11. interpretations: 해석이 하나로 좁혀지면 []. 여러 방향이면 2~4개. 수정 대상을 특정할 수 없으면 []로 두고 missing_information에 필요한 정보를 적는다.
-12. prior_feedback_reference
+9. confidence_reason은 한 문장으로 왜 그 값인지 쓴다.
+10. interpretations: 해석이 하나로 좁혀지면 []. 여러 방향이면 2~4개. 수정 대상을 특정할 수 없으면 []로 두고 missing_information에 필요한 정보를 적는다.
+11. prior_feedback_reference
    - 요청이 이전 피드백을 참조하지 않으면 not_applicable(이전 피드백 제공 여부와 무관).
    - 참조하는데 이전 피드백이 없으면 not_provided, missing_information에 기록.
    - 참조하고 이전 피드백에서 관련 내용을 찾으면 matched, 못 찾으면 not_found.
    - 이전 피드백의 문장은 새 항목이나 original_text에 넣지 않는다.
-13. questions
+12. questions
    - needs_confirmation이면 1개 이상, actionable이면 [].
    - 열린 질문보다 선택지가 있는 질문을 쓴다(선택지는 해석안에서). 한 질문에 하나만 묻는다. 원문에 답이 있는 것은 묻지 않는다.
    - 의뢰인에게 그대로 보낼 수 있는 존댓말로 쓴다. 위치 지시어 항목은 "시안을 보며 짚어달라"는 질문을 만든다.
 
-14. notes에는 충돌, 해석상 주의점, 유지 지시만 적는다. 해당 사항이 없으면 빈 배열 []로 둔다.
+13. notes에는 충돌, 해석상 주의점, 유지 지시만 적는다. 해당 사항이 없으면 빈 배열 []로 둔다.
 
 [출력 JSON 형태] 모든 필드는 항상 있어야 하고 null을 쓰지 않는다. 값이 없으면 [] 또는 "unknown".
 {
-  "feedback_context": { "channel": "...", "sender": "..." },
   "analysis": { "input_type": "...", "summary": "..." },
   "items": [
     {
@@ -81,10 +80,12 @@ export function buildAnalysisPrompt(input: AnalysisInput): string {
 		.map((sentence, index) => `${index + 1}. ${sentence}`)
 		.join('\n');
 	const prior = input.prior_feedback?.trim() ? input.prior_feedback.trim() : '(없음)';
+	const sender = senderOf(input);
 	return `${RULES}
 
-[프로젝트 설명]
-${input.project_line}
+[프로젝트]
+${input.project_name}
+전달자: ${sender === 'unknown' ? '알 수 없음' : sender}
 
 [피드백 원문]
 ${input.feedback}

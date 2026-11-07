@@ -4,7 +4,8 @@ import { issuesToErrors, validate, validateRefs, type AnalysisInput, type Valida
 import { splitSentences } from './sentences.ts';
 
 // The part of docs/analysis-schema.md the model fills. schema_version,
-// project.name, items[].id, and the three counts are filled by assemble().
+// project.name, feedback_context, items[].id, and the three counts are filled
+// by assemble().
 // Sentence fields hold 1-based numbers into splitSentences(feedback);
 // assemble() turns them back into the original sentences.
 
@@ -24,10 +25,6 @@ export const ItemSchema = v.object({
 });
 
 export const LlmAnalysisSchema = v.object({
-	feedback_context: v.object({
-		channel: v.picklist(['email', 'messenger', 'document', 'unknown']),
-		sender: v.string(),
-	}),
 	analysis: v.object({
 		input_type: v.picklist(['revision_feedback', 'no_revision_request', 'out_of_scope']),
 		summary: v.string(),

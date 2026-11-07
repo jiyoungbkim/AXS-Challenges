@@ -76,7 +76,8 @@
   `wrangler.jsonc` `migrations`에 `Flue<Name>Agent`를 **새 tag**로 추가한다(기존 tag 수정 금지).
 - `package.json`의 `@earendil-works/pi-*` overrides는 사용자 확인 없이 변경하지 않는다.
 - 분석 에이전트의 모델은 `hoksiyo-backend/src/analysis/models.ts`의 상수가 기준이다
-  (분석(harness) `ANALYSIS_MODEL` = `@cf/zai-org/glm-5.3`, 메인 턴 `MAIN_TURN_MODEL` = `@cf/zai-org/glm-4.7-flash`).
+  (분석(harness) `ANALYSIS_MODEL` = `@cf/zai-org/glm-5.3`, thinking 수준 `ANALYSIS_THINKING` = `low`,
+  메인 턴 `MAIN_TURN_MODEL` = `@cf/zai-org/glm-4.7-flash`).
   모델을 바꿀 때는 이 파일만 고친다. glm-5.3은 Workers Paid가 필요하고, Free 플랜에서 막힌 모델은 403 오류가 난다.
   (`src/agents/hello.ts`의 `useModel` 값은 예제 에이전트 전용이다.)
 - Valibot은 직접 의존성이 아니다(@flue/runtime의 간접 의존성). 직접 import하려면 먼저 package.json에 추가할지 확인한다.

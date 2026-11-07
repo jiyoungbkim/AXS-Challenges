@@ -12,7 +12,7 @@ import {
 import * as v from 'valibot';
 import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
 import { buildResultSchema, judgmentsOf, LlmAnalysisSchema, type Judgment } from '../analysis/llm-schema.ts';
-import { ANALYSIS_MODEL, cloudflareModel, MAIN_TURN_MODEL } from '../analysis/models.ts';
+import { ANALYSIS_MODEL, ANALYSIS_THINKING, cloudflareModel, MAIN_TURN_MODEL, type Thinking } from '../analysis/models.ts';
 import { buildAnalysisPrompt, buildRetryPrompt, TEXT_MODE_SUFFIX } from '../analysis/prompt.ts';
 import { splitSentences } from '../analysis/sentences.ts';
 import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
@@ -33,7 +33,7 @@ interface Attempt {
 interface AnalysisMeta {
 	mode: Mode;
 	model: string;
-	thinking?: Thinking;
+	thinking: Thinking;
 	outcome: Outcome;
 	outcome_detail?: string;
 	attempts: Attempt[];
@@ -49,14 +49,12 @@ interface RunResult {
 	meta: Omit<AnalysisMeta, 'mode' | 'model' | 'thinking' | 'duration_ms'>;
 }
 
-type Thinking = 'low' | 'medium' | 'high';
-
 interface ModelOptions {
 	model: string;
-	thinkingLevel?: Thinking;
+	thinkingLevel: Thinking;
 }
 
-type AnalyzeFeedbackInput = AnalysisInput & { mode: Mode; model?: string; thinking?: Thinking };
+type AnalyzeFeedbackInput = AnalysisInput & { mode: Mode; model?: string };
 
 function finalize(input: AnalysisInput, analysis: AnalysisResult | undefined, meta: RunResult['meta']): RunResult {
 	if (!analysis) return { meta };
@@ -182,16 +180,16 @@ export function AnalyzeFeedback() {
 
 	useAgentStart(async ({ harness }) => {
 		const startedAt = Date.now();
-		// 실험용, 배포 전 제거: per-request harness model and reasoning effort.
+		// 실험용, 배포 전 제거: per-request harness model.
 		const model = input.model ?? ANALYSIS_MODEL;
-		const options: ModelOptions = { model: cloudflareModel(model), thinkingLevel: input.thinking };
+		const options: ModelOptions = { model: cloudflareModel(model), thinkingLevel: ANALYSIS_THINKING };
 		const run =
 			input.mode === 'C' ? await runResultMode(harness, input, options) : await runTextMode(harness, input, options);
 		if (run.analysis) writeAnalysis(run.analysis);
 		writeMeta({
 			mode: input.mode,
 			model,
-			thinking: input.thinking,
+			thinking: ANALYSIS_THINKING,
 			...run.meta,
 			duration_ms: Date.now() - startedAt,
 		} satisfies AnalysisMeta);
@@ -210,10 +208,11 @@ export function AnalyzeFeedback() {
 AnalyzeFeedback.durability = { maxAttempts: 2, timeoutMs: 240_000 };
 
 AnalyzeFeedback.initialData = v.object({
-	project_line: v.string(),
+	project_name: v.string(),
+	sender: v.optional(v.string()),
+	channel: v.optional(v.picklist(['email', 'messenger', 'document'])),
 	feedback: v.string(),
 	prior_feedback: v.optional(v.string()),
 	mode: v.picklist(['C', 'B']), // 실험용, 배포 전 제거
 	model: v.optional(v.string()), // 실험용, 배포 전 제거
-	thinking: v.optional(v.picklist(['low', 'medium', 'high'])), // 실험용, 배포 전 제거
 });
