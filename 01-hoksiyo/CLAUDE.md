@@ -91,3 +91,11 @@
 - 프론트엔드에서 백엔드를 호출하는 방식 (service binding, 직접 fetch, CORS)
 - 분석 에이전트의 출력 형식을 강제하는 방법 (Flue 구조화 출력 기능 여부. `npx flue docs`로 확인)
 - 백엔드와 프론트엔드 개발 서버를 동시에 띄울 때 포트(5173) 충돌 여부
+
+### 배포 전 정리 (11/9 첫 배포 전에 한 번에 진행. 그 전에는 코드를 지우지 않는다)
+`실험용, 배포 전 제거` 주석이 달린 코드를 아래 방향으로 정리한다.
+- `model` 입력과 관련 코드 삭제 (`analyze-feedback.ts`의 `input.model ?? ANALYSIS_MODEL`, `app.ts`의 같은 식 포함)
+- `useResponseFinish`는 유지하고, 주석을 "정식 기능: 사용량 카운터용"으로 변경 (`app.ts`가 메인 턴 usage를 이 값으로 계산함)
+- `mode` 입력과 B 모드 관련 함수(`runTextMode`, `checkText`, `parseJson`, `addUsage`, `TEXT_MODE_SUFFIX`, `buildRetryPrompt`) 모두 삭제
+- 응답의 `reply_text`, `reply_metadata` 삭제
+- 입력 스키마를 `v.strictObject`로 바꿔 모르는 필드는 400으로 거부

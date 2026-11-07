@@ -39,7 +39,9 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - 의심스러우면 한 단계 낮춘다. ${quoteList(DEGREE_EXPRESSIONS)}가 있으면 high가 아니다. 지시어(${quoteList(DEICTIC_EXPRESSIONS)})가 있으면 low. 문제 현상만 말하고 방법이 없으면(묻혀요, 쓸쓸했으면) low.
 8. status(지금 확인 없이 작업해도 재작업 위험이 낮은가)는 confidence와 따로 판정한다.
    - low의 기본값은 needs_confirmation. high의 기본값은 actionable(충돌이 있으면 needs_confirmation).
-   - medium: 정도만 열려 있고 조정이 쉬운 수정(크기, 위치, 간격)은 actionable이고, 가정한 정도를 confidence_reason에 적는다. 방법이 열려 결과가 크게 달라지면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.
+   - medium: 정도만 열려 있고 조정이 쉬운 수정(크기, 위치, 간격)은 actionable이다. 방법이 열려 결과가 크게 달라지면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.
+   - status가 actionable이면 questions는 반드시 []이다.
+   - medium이면서 actionable이면, 가정한 정도(예: 소폭 축소로 가정)를 confidence_reason에 적는다. notes에 적지 않는다.
 9. confidence_reason은 한 문장으로 왜 그 값인지 쓴다.
 10. interpretations: 해석이 하나로 좁혀지면 []. 여러 방향이면 2~4개. 수정 대상을 특정할 수 없으면 []로 두고 missing_information에 필요한 정보를 적는다.
 11. prior_feedback_reference
