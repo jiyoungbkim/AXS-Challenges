@@ -83,7 +83,7 @@ export function describeOutcome(meta: AnalysisMeta): Failure {
     case 'no_finish':
     case 'give_up':
       return {
-        message: '분석 결과가 형식 검사를 통과하지 못했어요. 다시 분석을 한 번 눌러 보세요. 또 실패하면 피드백을 나눠서 분석하세요.',
+        message: '분석 결과가 형식 검사를 통과하지 못했어요. 한 번만 다시 분석해 보고, 또 실패하면 피드백을 나눠서 분석하세요.',
         next: 'retry',
       };
     case 'timeout':
@@ -124,7 +124,7 @@ export const REQUIRED_MESSAGE = {
 
 // Shown above a result whose meta.final_errors is not empty.
 export const RESULT_CHECK_WARNING =
-  '자동 점검에서 맞지 않는 부분이 있었어요. 원문과 항목을 직접 비교해 확인하세요.';
+  '자동 점검에서 맞지 않는 부분이 있었어요. 결과를 그대로 믿지 말고 원문과 비교해 확인하세요.';
 
 // Labels. Meaning never rests on color alone: status has a mark, confidence a dot count.
 
@@ -161,10 +161,15 @@ export const EMPTY_RESULT_MESSAGE: Record<Exclude<InputType, 'revision_feedback'
   out_of_scope: '수정 피드백이 아니라서 분석하지 않았어요. 견적·일정 문의는 직접 답해 주세요.',
 };
 
-export function requesterLabel(requester: string, sender: string, identified: boolean): string {
-  if (!identified) return '요청한 사람 확인 안 됨';
-  if (requester === sender || sender === 'unknown') return `요청한 사람 ${requester}`;
-  return `요청한 사람 ${requester} (전달한 사람과 다름)`;
+// The value after the "요청한 사람" label.
+export function requesterText(requester: string, sender: string, identified: boolean): string {
+  if (!identified) return '확인 안 됨';
+  if (requester === sender || sender === 'unknown') return requester;
+  return `${requester} (전달한 사람과 다름)`;
+}
+
+export function senderText(sender: string): string {
+  return sender === 'unknown' ? '알 수 없음' : sender;
 }
 
 // Notes written as "유지 지시: <대상>" (docs/analysis-schema.md 3.5).

@@ -1,4 +1,5 @@
-// Real /api/analyze responses from hoksiyo-backend/experiments/2026-11-08-integration
+// Real /api/analyze responses from hoksiyo-backend/experiments/2026-11-08-integration,
+// except T10 from 2026-11-08-revalidate (marked below)
 // (docs/test-cases.md inputs), used by worker/mock.ts. reply_text and
 // reply_metadata are kept on purpose: the proxy must strip them.
 // Copied as is (minus the run script's _-prefixed fields); do not edit by hand.
@@ -546,6 +547,7 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
       }
     }
   },
+  // T10: hoksiyo-backend/experiments/2026-11-08-revalidate/T10.json
   "T10": {
     "feedback": "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요. 모바일에서 보면 너무 작아서 안 읽혀요. 의상은 지금 노란 원피스 그대로 두세요.",
     "body": {
@@ -560,10 +562,10 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
         },
         "analysis": {
           "input_type": "revision_feedback",
-          "summary": "주인공 머리색을 더 밝게 해달라는 요청과 1장 말풍선 글씨 크기 키워달라는 요청이 있습니다. 의상 노란 원피스는 유지 지시입니다.",
+          "summary": "주인공 머리색을 밝게 할 것과 1장 말풍선 글씨 크기 확대 요청이 있고, 의상은 유지 지시입니다.",
           "total_items": 2,
-          "actionable_count": 1,
-          "confirmation_count": 1
+          "actionable_count": 2,
+          "confirmation_count": 0
         },
         "items": [
           {
@@ -571,22 +573,15 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
             "original_text": [
               "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요."
             ],
-            "request": "주인공 머리색을 지금보다 더 밝게 해달라는 요청",
+            "request": "주인공 머리색을 지금보다 밝게 조정해 달라는 요청입니다.",
             "requester": "독립출판 작가",
             "requester_status": "identified",
-            "interpretations": [
-              "머리색의 명도를 현재보다 소폭 높이는 것",
-              "전체적으로 한두 단계 밝은 톤으로 바꾸는 것",
-              "어두운 부분 위주로 밝게 조정하는 것"
-            ],
+            "interpretations": [],
             "confidence": "medium",
-            "confidence_reason": "수정 대상(주인공 머리색)과 방향(더 밝게)은 명확하지만 '좀 더'라고만 하여 밝게 만드는 정도가 열려 있습니다.",
-            "status": "needs_confirmation",
+            "confidence_reason": "수정 대상(주인공 머리색)은 명확하지만 '좀 더 밝게'라는 정도와 색상 값이 열려 있어 있습니다.",
+            "status": "actionable",
             "prior_feedback_reference": "not_applicable",
-            "questions": [
-              "머리색은 현재보다 얼마나 밝게 할까요? (예: 한두 단계 밝게, 특정 색상 톤 지정)",
-              "밝힐 범위는 전체 머리카락인가요, 그림자 진 부분만인가요?"
-            ]
+            "questions": []
           },
           {
             "id": 2,
@@ -594,12 +589,12 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
               "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요.",
               "모바일에서 보면 너무 작아서 안 읽혀요."
             ],
-            "request": "1장 삽화 말풍선 글씨를 현재보다 크게 키워 모바일에서도 읽히게 해달라는 요청",
+            "request": "1장 삽화 말풍선 글씨를 키워달라는 요청으로, 모바일에서 읽을 수 있는 크기가 목표입니다.",
             "requester": "독립출판 작가",
             "requester_status": "identified",
             "interpretations": [],
             "confidence": "medium",
-            "confidence_reason": "수정 대상(1장 삽화 말풍선 글씨)과 방향(크기 키우기)은 명확하지만 키우는 정도가 열려 있어 '좀' 등 정도 표현 규칙상 high로 볼 수 없습니다.",
+            "confidence_reason": "대상(1장 말풍선 글씨)과 방향(확대)은 명확하지만 목표 크기가 제시되지 않아 정도가 열려 있습니다. 모바일에서 읽히는 수준까지 소폭 이상 확대로 가정합니다.",
             "status": "actionable",
             "prior_feedback_reference": "not_applicable",
             "questions": []
@@ -623,30 +618,11 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
         "attempts": [
           {
             "n": 1,
-            "errors": [
-              {
-                "cond": 17,
-                "message": "항목 2의 원문에 '좀'이 있어 high로 판정할 수 없습니다. medium 또는 low로 다시 판정하세요."
-              }
-            ],
-            "judgments": [
-              {
-                "confidence": "medium",
-                "status": "needs_confirmation"
-              },
-              {
-                "confidence": "high",
-                "status": "actionable"
-              }
-            ]
-          },
-          {
-            "n": 2,
             "errors": [],
             "judgments": [
               {
                 "confidence": "medium",
-                "status": "needs_confirmation"
+                "status": "actionable"
               },
               {
                 "confidence": "medium",
@@ -659,11 +635,11 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
         "warnings": [],
         "outcome": "finished",
         "usage": {
-          "input": 494,
-          "output": 1317,
-          "cacheRead": 6976,
+          "input": 1128,
+          "output": 443,
+          "cacheRead": 2240,
           "cacheWrite": 0,
-          "totalTokens": 8787,
+          "totalTokens": 3811,
           "cost": {
             "input": 0,
             "output": 0,
@@ -672,16 +648,16 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
             "total": 0
           }
         },
-        "duration_ms": 23157
+        "duration_ms": 4711
       },
       "reply_text": "완료",
       "reply_metadata": {
         "response_usage": {
           "input": 506,
-          "output": 271,
+          "output": 90,
           "cacheRead": 0,
           "cacheWrite": 0,
-          "totalTokens": 777,
+          "totalTokens": 596,
           "cost": {
             "input": 0,
             "output": 0,
@@ -692,9 +668,9 @@ export const CASE_FIXTURES: Record<string, { feedback: string; body: Record<stri
         }
       },
       "usage": {
-        "neurons": 767,
+        "neurons": 380,
         "basis": "measured",
-        "daily_used": 1574,
+        "daily_used": 2325,
         "daily_limit": 9000
       }
     }

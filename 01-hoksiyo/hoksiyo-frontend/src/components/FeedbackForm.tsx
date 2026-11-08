@@ -153,7 +153,7 @@ export function FeedbackForm({ values, submitting, onChange, onSubmit }: Feedbac
                 checked={values.channel === ''}
                 onChange={() => onChange('channel', '')}
               />
-              모름
+              선택 안 함
             </label>
           </div>
         </div>

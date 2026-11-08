@@ -325,24 +325,479 @@ p {
   font-variant-numeric: tabular-nums;
 }
 
-/* 임시 표시 (3차에서 교체) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
-.temporary h2 {
-  font-size: var(--size-heading);
+h3,
+h4 {
+  margin: 0;
+}
+
+code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.875em;
+}
+
+/* A text-styled button: "→ 항목 n", "원문에서 보기", "복사". Pressed loses the
+   underline and gains weight, so the state does not rest on color. */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.link-button[aria-pressed='true'] {
   font-weight: 600;
+  text-decoration: none;
+}
+
+.reason {
+  display: block;
+  color: var(--pencil);
+  font-size: var(--size-small);
+  max-width: var(--measure);
+}
+
+.plain-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.plain-list li + li {
+  margin-top: 0.25rem;
+}
+
+/* A dash, not a circle: hollow circles would read as confidence dots. */
+.plain-list li::marker {
+  content: '– ';
+  color: var(--pencil);
+}
+
+.source-quote {
+  font-family: var(--serif);
+  line-height: 1.75;
+}
+
+details > summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Result */
+
+.page.wide {
+  max-width: 72rem;
+}
+
+.warning {
+  max-width: var(--measure);
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--ink);
+  font-weight: 600;
+}
+
+.result-head {
+  display: grid;
+  gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.result-head h2 {
+  font-size: var(--size-title);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+}
+
+.context div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.context dt {
+  color: var(--pencil);
+}
+
+.context dd {
+  margin: 0;
+}
+
+.summary {
+  max-width: var(--measure);
+}
+
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.tally .count {
+  margin-right: 1rem;
+}
+
+.count {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The one loud thing: 확인 필요 is marked with the highlighter, 착수 가능 with an ink bar. */
+.status-mark {
+  display: inline-block;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.status-mark.confirm {
+  padding: 0 0.4rem;
+  border-radius: 2px;
+  background: var(--highlighter);
+  color: var(--ink);
+}
+
+.status-mark.actionable {
+  padding-left: 0.4rem;
+  border-left: 3px solid var(--blue);
+}
+
+.unlinked-line {
+  font-weight: 600;
+}
+
+.unlinked-line a {
+  color: var(--blue);
+}
+
+.result-columns {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 60rem) {
+  .result-columns {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .source-column {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+}
+
+/* The original: folded on narrow screens, always open in two columns. */
+.source-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.temporary .actions {
-  margin: 1rem 0;
+.source-head h3,
+.item-group h3,
+.questions h3,
+.review h3 {
+  font-size: var(--size-heading);
+  font-weight: 600;
 }
 
-.raw {
-  padding: 1rem;
-  border: 1px solid var(--rule);
-  background: var(--field);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+.source-panel.is-collapsed {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .source-toggle {
+    display: none;
+  }
+
+  .source-panel.is-collapsed {
+    display: block;
+  }
+}
+
+.source-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.source-sentence {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  padding: 0.5rem 0.5rem 0.5rem 0.25rem;
+  border-left: 3px solid transparent;
+}
+
+.source-sentence.is-highlighted {
+  border-left-color: var(--blue);
+  background: var(--blue-tint);
+}
+
+.source-number {
+  padding-top: 0.2rem;
+  color: var(--pencil);
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.source-text {
+  font-family: var(--serif);
+  line-height: 1.75;
+}
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.125rem 0.75rem;
+  margin-top: 0.125rem;
+  font-size: var(--size-small);
+}
+
+.source-note {
+  color: var(--pencil);
+}
+
+.source-note.unlinked {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Items */
+
+.item-group + .item-group {
+  margin-top: 2rem;
+}
+
+.item-group h3 {
+  margin-bottom: 0.5rem;
+}
+
+.item-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  padding: 1.25rem 0.75rem 1.25rem 1rem;
+  border-top: 1px solid var(--rule);
+  border-left: 3px solid transparent;
+}
+
+.item-actionable {
+  border-left-color: var(--blue);
+}
+
+.item.is-selected {
+  background: var(--blue-tint);
+}
+
+.item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--size-small);
+}
+
+.item-id {
+  color: var(--pencil);
+  font-size: var(--size-small);
+}
+
+.item-request {
+  margin: 0.25rem 0 0.75rem;
+  font-size: var(--size-heading);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* 확인 필요 requests are marked the way an editor would: with a highlighter. */
+.item-confirm .request-text {
+  background: linear-gradient(transparent 58%, var(--highlighter) 58%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.item-facts {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.item-facts > div {
+  display: grid;
+  gap: 0.125rem;
+}
+
+@media (min-width: 45rem) {
+  .item-facts > div {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+.item-facts dt {
+  color: var(--pencil);
+  font-size: var(--size-small);
+  padding-top: 0.125rem;
+}
+
+.item-facts dd {
+  margin: 0;
+  max-width: var(--measure);
+}
+
+.confidence {
+  font-weight: 600;
+}
+
+.dots {
+  letter-spacing: 0.08em;
+}
+
+.tag {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: var(--size-small);
+}
+
+.question-list {
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.question-list li + li {
+  margin-top: 0.375rem;
+}
+
+/* Questions to send */
+
+.questions {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.section-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.copy-status {
+  min-height: 1.6em;
+  margin: 0.5rem 0;
+  font-size: var(--size-small);
+  font-weight: 600;
+}
+
+.question-group + .question-group {
+  margin-top: 1rem;
+}
+
+.question-about {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.question-about .item-id {
+  margin-right: 0.25rem;
+  font-weight: 400;
+}
+
+.question-text {
+  margin-right: 0.75rem;
+}
+
+.questions .link-button {
+  font-size: var(--size-small);
+}
+
+/* Review */
+
+.review {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.review-part {
+  margin-top: 1.25rem;
+}
+
+.review-part h4 {
+  margin-bottom: 0.375rem;
+  font-size: var(--size-body);
+  font-weight: 600;
+}
+
+.review-part.unmatched {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--ink);
+}
+
+.review-part.unmatched .reason {
+  margin-bottom: 0.5rem;
+}
+
+details.review-part > summary {
+  margin-bottom: 0.375rem;
+}
+
+/* Empty results and errors */
+
+.empty-result h3,
+.error-notice h2 {
+  font-size: var(--size-heading);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.list-label {
+  margin-bottom: 0.375rem;
+  color: var(--pencil);
+  font-size: var(--size-small);
+}
+
+.empty-result .actions {
+  margin-top: 1.5rem;
+}
+
+.error-message {
+  max-width: var(--measure);
+  margin-bottom: 1.5rem;
 }
