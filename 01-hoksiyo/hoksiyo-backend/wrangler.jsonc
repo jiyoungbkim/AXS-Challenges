@@ -28,8 +28,9 @@
 	// allocation is shared by local dev and deploys, so split it between them.
 	"vars": {
 		"DAILY_NEURON_LIMIT": "9000",
-		"USAGE_WORST_BASE": "2000",
-		"USAGE_WORST_PER_SENTENCE": "1000",
+		"USAGE_WORST_BASE": "1800",
+		"USAGE_WORST_PER_SENTENCE": "400",
 		"USAGE_CORRECTION_FACTOR": "1.0",
+		"MAX_SENTENCES": "12",
 	}
 }

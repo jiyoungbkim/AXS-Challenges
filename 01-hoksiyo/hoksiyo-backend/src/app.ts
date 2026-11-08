@@ -37,9 +37,9 @@ app.post('/api/analyze', async (c) => {
 	const config = readUsageConfig(c.env);
 	const counter = usageCounter(c.env.USAGE_COUNTER);
 	const sentences = splitSentences(input.feedback).length;
-	// Too long for any day, even an empty one: not a daily-limit problem.
-	if (worstCase(sentences, config) > config.dailyLimit) {
-		const max = maxSentences(config);
+	// Over the cap or too long for any day, even an empty one: not a daily-limit problem.
+	const max = maxSentences(config);
+	if (sentences > max) {
 		return c.json(
 			{ error: 'too_many_sentences', message: `한 번에 ${max}문장까지 분석할 수 있습니다. 피드백을 나눠서 보내 주세요.`, max, sentences },
 			400,

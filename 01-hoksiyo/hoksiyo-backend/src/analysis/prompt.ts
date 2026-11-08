@@ -34,12 +34,12 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - 근거가 없거나 전달자가 "알 수 없음"이면 "unknown", unconfirmed.
 7. confidence(해석의 명확성)
    - high: 수정 대상과 방향이 모두 명확하고 해석이 하나로 좁혀짐.
-   - medium: 대상은 명확하지만 방법이나 정도가 열려 있음, 또는 이전 요청을 참조하는데 이전 피드백이 없어 대조할 수 없음.
+   - medium: 대상은 명확하지만 방법이나 정도가 정해지지 않음, 또는 이전 요청을 참조하는데 이전 피드백이 없어 대조할 수 없음.
    - low: 해석이 여러 갈래이거나 텍스트만으로 수정 대상을 특정할 수 없음.
    - 의심스러우면 한 단계 낮춘다. ${quoteList(DEGREE_EXPRESSIONS)}가 있으면 high가 아니다. 지시어(${quoteList(DEICTIC_EXPRESSIONS)})가 있으면 low. 문제 현상만 말하고 방법이 없으면(묻혀요, 쓸쓸했으면) low.
 8. status(지금 확인 없이 작업해도 재작업 위험이 낮은가)는 confidence와 따로 판정한다.
    - low의 기본값은 needs_confirmation. high의 기본값은 actionable(충돌이 있으면 needs_confirmation).
-   - medium: 정도만 열려 있고 조정이 쉬운 수정(크기, 위치, 간격, 밝기 등)은 actionable이다. 방법이 열려 결과가 크게 달라지면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.
+   - medium: 정도만 정해지지 않았고 조정이 쉬운 수정(크기, 위치, 간격, 밝기 등)은 actionable이다. 방법이 정해지지 않아 결과가 크게 달라질 수 있으면 needs_confirmation. 이전 요청을 참조하는데 이전 피드백이 없으면 needs_confirmation.
    - status가 actionable이면 questions는 반드시 []이다.
    - medium이면서 actionable이면, 가정한 정도(예: 소폭 축소로 가정)를 confidence_reason에 적는다. notes에 적지 않는다.
 9. confidence_reason은 한 문장으로 왜 그 값인지 쓴다.

@@ -2,17 +2,20 @@ import { ratesFor } from '../analysis/models.ts';
 
 // Daily Neurons budget. Every value can be set per environment (wrangler.jsonc
 // `vars` for deploys, `.env` for local dev); the defaults below apply otherwise.
-// The worst-case coefficients are about 4.7x the glm-5.3 thinking-low runs in
-// experiments/2026-11-07-thinking-low (only two samples), so W(n) plus the
-// 1,000 Neurons between the limit and the free 10,000 also covers a run as long
-// as the medium ones. Recorded usage matched the Cloudflare dashboard on
-// 2026-11-07, so the correction factor is 1.
+// The worst-case coefficients fit 14 glm-5.3 thinking-low runs in experiments/
+// (2026-11-07-thinking-low, 2026-11-08-input-sender, 2026-11-08-integration):
+// W(n) is 2.8-3.6x the largest run per sentence count and 2x what those runs
+// would cost with no cached input. The 1,000 Neurons between the limit and the
+// free 10,000 are extra margin. Recorded usage matched the Cloudflare dashboard
+// on 2026-11-07, so the correction factor is 1. Inputs over maxSentences are
+// refused: runs were only observed up to 4 sentences.
 
 export interface UsageEnv {
 	DAILY_NEURON_LIMIT?: string;
 	USAGE_WORST_BASE?: string;
 	USAGE_WORST_PER_SENTENCE?: string;
 	USAGE_CORRECTION_FACTOR?: string;
+	MAX_SENTENCES?: string;
 }
 
 export interface UsageConfig {
@@ -20,9 +23,16 @@ export interface UsageConfig {
 	worstBase: number;
 	worstPerSentence: number;
 	correction: number;
+	maxSentences: number;
 }
 
-const DEFAULTS: UsageConfig = { dailyLimit: 9_000, worstBase: 2_000, worstPerSentence: 1_000, correction: 1 };
+const DEFAULTS: UsageConfig = {
+	dailyLimit: 9_000,
+	worstBase: 1_800,
+	worstPerSentence: 400,
+	correction: 1,
+	maxSentences: 12,
+};
 
 function positive(value: string | undefined, fallback: number, name: string): number {
 	if (value === undefined || value.trim() === '') return fallback;
@@ -37,6 +47,7 @@ export function readUsageConfig(env: UsageEnv): UsageConfig {
 		worstBase: positive(env.USAGE_WORST_BASE, DEFAULTS.worstBase, 'USAGE_WORST_BASE'),
 		worstPerSentence: positive(env.USAGE_WORST_PER_SENTENCE, DEFAULTS.worstPerSentence, 'USAGE_WORST_PER_SENTENCE'),
 		correction: positive(env.USAGE_CORRECTION_FACTOR, DEFAULTS.correction, 'USAGE_CORRECTION_FACTOR'),
+		maxSentences: Math.floor(positive(env.MAX_SENTENCES, DEFAULTS.maxSentences, 'MAX_SENTENCES')),
 	};
 }
 
@@ -59,9 +70,11 @@ export function worstCase(sentences: number, config: UsageConfig): number {
 	return (config.worstBase + config.worstPerSentence * sentences) * config.correction;
 }
 
-// The most sentences one analysis may have and still fit in an empty day.
+// The most sentences one analysis may have: the configured cap, and no more
+// than still fits in an empty day.
 export function maxSentences(config: UsageConfig): number {
-	return Math.max(0, Math.floor((config.dailyLimit / config.correction - config.worstBase) / config.worstPerSentence));
+	const fits = Math.floor((config.dailyLimit / config.correction - config.worstBase) / config.worstPerSentence);
+	return Math.max(0, Math.min(config.maxSentences, fits));
 }
 
 // Output the model could have produced while running for elapsedMs, corrected.
