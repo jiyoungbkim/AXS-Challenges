@@ -105,3 +105,4 @@
 - `mode` 입력과 B 모드 관련 함수(`runTextMode`, `checkText`, `parseJson`, `addUsage`, `TEXT_MODE_SUFFIX`, `buildRetryPrompt`) 모두 삭제
 - 응답의 `reply_text`, `reply_metadata` 삭제
 - 입력 스키마를 `v.strictObject`로 바꿔 모르는 필드는 400으로 거부
+- 백엔드 `wrangler.jsonc`에 `"workers_dev": false`, `"preview_urls": false` 추가 (공개 URL로 접속 코드를 우회하지 못하게. service binding은 그대로 동작). 프론트 `worker/analyze.ts`의 임시 `mode: 'C'`도 함께 삭제
