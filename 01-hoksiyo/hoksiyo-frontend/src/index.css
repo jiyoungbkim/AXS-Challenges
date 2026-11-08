@@ -1,111 +1,348 @@
+/* 혹시요: a desk where you read an editor's marks. The original feedback is
+   set in a serif like the letter it came from; what the tool writes is set in
+   the sans. The highlighter is kept for "확인 필요" marks only. Light only. */
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --paper: #f6f7f5; /* page background: cool tracing paper */
+  --ink: #1e2226; /* body text */
+  --pencil: #5e646b; /* secondary text (5.6:1 on paper) */
+  --rule: #d7dad6; /* dividers only */
+  --field-border: #7a8087; /* input edges (3.7:1 on paper) */
+  --field: #ffffff;
+  --blue: #2c4f86; /* 착수 가능, focus, primary button */
+  --blue-tint: #e4eaf3; /* highlighted original sentences */
+  --highlighter: #f3d54e; /* 확인 필요 marks only */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --serif: 'Noto Serif KR', AppleMyungjo, Batang, serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* Type scale: 15 / 17 / 20 / 26 */
+  --size-small: 0.9375rem;
+  --size-body: 1.0625rem;
+  --size-heading: 1.25rem;
+  --size-title: 1.625rem;
+
+  /* About 38 Hangul characters, the Korean counterpart of an 80-character line. */
+  --measure: 38em;
+
+  color-scheme: light;
+  font-family: var(--sans);
+  font-size: 100%;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  text-rendering: optimizeLegibility;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--paper);
+  font-size: var(--size-body);
 }
 
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
+h2,
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Page */
+
+.page {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.wordmark {
+  font-size: var(--size-title);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  color: var(--pencil);
+  font-size: var(--size-small);
+}
+
+.lede {
+  max-width: var(--measure);
+  margin-bottom: 1.25rem;
+}
+
+.hint {
+  color: var(--pencil);
+  font-size: var(--size-small);
+  max-width: var(--measure);
+}
+
+.optional {
+  margin-left: 0.25rem;
+  color: var(--pencil);
+  font-size: var(--size-small);
+  font-weight: 400;
+}
+
+/* Fields */
+
+.field-label {
+  display: block;
+  font-weight: 600;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--field-border);
+  border-radius: 3px;
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.5;
+}
+
+.input::placeholder {
+  color: var(--pencil);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+/* The original feedback, as received. */
+.input.source {
+  font-family: var(--serif);
+  line-height: 1.75;
+  resize: vertical;
+}
+
+/* Disabled while submitting: still readable, not greyed out. */
+.fields:disabled .input {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink);
+}
+
+.field-message {
+  margin-top: 0.375rem;
+  font-weight: 600;
+  font-size: var(--size-small);
+}
+
+/* Access code */
+
+.gate .field-label {
+  margin-bottom: 0.375rem;
+}
+
+.gate-row {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 28rem;
+}
+
+.gate-row .input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Input form: labels above fields on narrow screens, in a column on wide ones. */
+
+.feedback-form .fields {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.row {
+  display: grid;
+  gap: 0.375rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 45rem) {
+  .row {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .row > .field-label {
+    padding-top: 0.5rem;
+  }
+}
+
+.field {
+  min-width: 0;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding-top: 0.5rem;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
+}
+
+.choice input {
+  width: 1.0625rem;
+  height: 1.0625rem;
+  margin: 0;
+  accent-color: var(--blue);
+}
+
+.counter {
+  margin-top: 0.5rem;
+}
+
+.counter-values {
+  display: flex;
+  gap: 1.25rem;
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Over a limit: weight and words carry it, not color. */
+.over {
+  font-weight: 600;
+  font-size: var(--size-small);
+}
+
+.prior summary {
+  display: inline-block;
+  padding: 0.25rem 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prior summary::marker,
+.prior summary::-webkit-details-marker {
+  display: none;
+}
+
+.prior summary::before {
+  content: '+';
+  display: inline-block;
+  width: 1.25em;
+  font-weight: 400;
+}
+
+.prior[open] summary::before {
+  content: '−';
+}
+
+.prior .hint {
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* Buttons */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem 1.25rem;
+}
+
+.button {
+  padding: 0.5625rem 1.25rem;
+  border: 1px solid var(--blue);
+  border-radius: 3px;
+  background: var(--blue);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button.secondary {
+  background: var(--field);
+  color: var(--blue);
+}
+
+.button:disabled {
+  border-color: var(--field-border);
+  background: var(--paper);
+  color: var(--pencil);
+  cursor: default;
+}
+
+.submit-status {
+  padding-top: 0.5rem;
+}
+
+.submit-status [role='status'] {
+  font-weight: 600;
+}
+
+.elapsed {
+  margin-left: 0.375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 임시 표시 (3차에서 교체) */
+
+.temporary h2 {
+  font-size: var(--size-heading);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.temporary .actions {
+  margin: 1rem 0;
+}
+
+.raw {
+  padding: 1rem;
+  border: 1px solid var(--rule);
+  background: var(--field);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

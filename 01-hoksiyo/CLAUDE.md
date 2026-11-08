@@ -106,3 +106,4 @@
 - 응답의 `reply_text`, `reply_metadata` 삭제
 - 입력 스키마를 `v.strictObject`로 바꿔 모르는 필드는 400으로 거부
 - 백엔드 `wrangler.jsonc`에 `"workers_dev": false`, `"preview_urls": false` 추가 (공개 URL로 접속 코드를 우회하지 못하게. service binding은 그대로 동작). 프론트 `worker/analyze.ts`의 임시 `mode: 'C'`도 함께 삭제
+- 배포 후 스모크 테스트에서 배포 환경이 mock 응답을 내지 않는지 확인 (`MOCK_ANALYZE`는 `.dev.vars`에만 있어야 함. 예: 원문 `mock:daily_limit`이 429 mock이 아니라 실제 분석으로 처리되는지)
