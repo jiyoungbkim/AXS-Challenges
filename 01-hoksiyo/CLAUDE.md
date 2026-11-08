@@ -7,8 +7,13 @@
 
 - 백엔드: Flue 2.3 + Hono + Workers AI (Durable Objects)
 - 프론트엔드: React 19 + Vite + Cloudflare Worker
-- 현재 상태: 백엔드에는 예제 `Hello` 에이전트만 있음. 분석 에이전트는 아직 없음.
-  프론트엔드는 Cloudflare React 템플릿 그대로이고 백엔드와 연결되어 있지 않음.
+- 현재 상태 (2026-11-08)
+  - 백엔드: 분석 에이전트 `AnalyzeFeedback` 완성(glm-5.3, thinking low). `docs/test-cases.md` T01~T10 통합 테스트 통과
+    (`hoksiyo-backend/experiments/2026-11-08-integration`, `-revalidate`).
+  - 사용량 한도(`UsageCounter` Durable Object) 동작 중. 하루 9,000 Neurons, 분석 1건당 W(n) = 1,800 + 400n 예약.
+  - 테스트 도구: `hoksiyo-backend/scripts/` (사용법은 `hoksiyo-backend/README.md` "Test scripts")
+  - 프론트엔드: 아직 Cloudflare React 템플릿 그대로이고 백엔드와 연결되어 있지 않음. **다음 작업은 프론트엔드.**
+  - 배포 전 정리 목록은 아래 "확인 필요"의 "배포 전 정리" 메모 참고.
 
 ## 폴더 구조
 ```

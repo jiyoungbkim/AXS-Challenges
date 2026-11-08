@@ -26,6 +26,22 @@ curl http://localhost:5173/api/usage   # today's Neurons usage and limit
 
 Each call spends real Workers AI Neurons, also in local dev. `/api/analyze` reserves against a daily budget first (`src/usage/`, limits in `wrangler.jsonc` `vars`, override locally in `.env`) and answers `429` once the day's limit is reached, `400` for feedback over 1,000 characters or too many sentences.
 
+## Test scripts
+
+`scripts/` holds the test tools (run them from this folder; details in each file's header):
+
+```sh
+# No model calls: prompt, assemble, budget, sentence cap. Run after changing src/analysis or src/usage.
+node --experimental-strip-types scripts/offline-check.mts
+
+# T01–T10 from docs/test-cases.md (inputs: scripts/cases.json). Needs `npm run dev`; spends Neurons.
+node --experimental-strip-types scripts/run-cases.mts experiments/2026-11-10-integration          # all 10
+node --experimental-strip-types scripts/run-cases.mts experiments/2026-11-10-integration T10 T04  # some
+node --experimental-strip-types scripts/summarize.mts experiments/2026-11-10-integration
+```
+
+`run-cases.mts` checks `/api/usage` before each case and skips the ones whose reservation would not fit today (run them after 00:00 UTC); it stops on a Workers AI 429, a billing error, or a timeout. All 10 cost about 4,000 Neurons, so they usually do not fit in one day together with other runs.
+
 ## Develop
 
 ```sh
