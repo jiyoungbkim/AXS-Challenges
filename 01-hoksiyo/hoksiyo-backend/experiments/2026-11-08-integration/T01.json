@@ -1,0 +1,159 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "제목의 가시성 개선(마케팅팀 요구)과 저자 이름 크기 축소 요청이 있습니다.",
+      "total_items": 2,
+      "actionable_count": 0,
+      "confirmation_count": 2
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "제목이 묻히지 않고 좀 더 눈에 띄었으면 합니다.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목 글자 크기 키우기",
+          "제목 색상·대비 강화",
+          "제목 주변 배경 정리"
+        ],
+        "confidence": "low",
+        "confidence_reason": "제목이 묻히는 문제만 제시되고 구체적 수정 방법이 없어 해석이 여러 갈래입니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목을 눈에 띄게 하려면 글자 크기 키우기와 색상·대비 조절 중 어느 방향으로 진행할까요?",
+          "마케팅팀이 원하는 '눈에 띄는' 정도는 어느 정도인가요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 조금 작게 해줬으면 합니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름 축소라는 대상과 방향은 명확하지만 '조금'이라는 정도가 열려 있고, 이전 요청을 참조하나 이전 피드백이 없어 대조할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "저자 이름은 현재 크기에서 어느 정도 줄이면 될까요?",
+          "저번에 말씀하신 구체적인 크기가 있다면 알려주실 수 있을까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "저자 이름 크기 관련 이전 피드백 내용"
+      ],
+      "notes": [
+        "문장 1은 칭찬(분위기)과 제목 수정 요청이 같은 문장에 있어 분리하지 않고 요청 항목에 포함했습니다.",
+        "문장 2는 마케팅팀이 요구 주체임을 밝힌 문장으로 제목 항목에 함께 넣었습니다."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 16,
+            "message": "문장 1이 items의 original_text와 non_request_text에 동시에 있습니다."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 1278,
+      "output": 1293,
+      "cacheRead": 6144,
+      "cacheWrite": 0,
+      "totalTokens": 8715,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 9712
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 58,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 564,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 830,
+    "basis": "measured",
+    "daily_used": 4464,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 11.25,
+  "_started_utc": "2026-11-07T22:18:22",
+  "_used_before": 3634.1394748000007,
+  "_W": 5000
+}

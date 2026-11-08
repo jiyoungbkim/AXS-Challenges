@@ -1,0 +1,105 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "이전 피드백을 참조하며 저자 이름을 작게 해달라는 수정 요청입니다. 이전 피드백에서 저자 이름 크기 관련 지적을 확인할 수 있어 일치합니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저번에 말씀드린 대로 저자 이름은 작게 부탁드려요."
+        ],
+        "request": "저자 이름을 이전 피드백에서 언급된 것처럼 눈에 띄지 않도록 줄여달라",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름이라는 대상과 축소라는 방향은 이전 피드백과의 대조로 명확하지만, 구체적인 크기나 정도는 열려 있어 소폭 축소로 가정합니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "matched",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 271,
+      "output": 330,
+      "cacheRead": 3008,
+      "cacheWrite": 0,
+      "totalTokens": 3609,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 2377
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 91,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 597,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 244,
+    "basis": "measured",
+    "daily_used": 5240,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 4.47,
+  "_started_utc": "2026-11-07T22:18:41",
+  "_used_before": 4996.5578488,
+  "_W": 3000
+}

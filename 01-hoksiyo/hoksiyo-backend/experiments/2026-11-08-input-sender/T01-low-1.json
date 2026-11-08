@@ -1,0 +1,135 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "제목의 시각적 강조 요청과 저자 이름 크기 축소 요청 두 가지가 있습니다.",
+      "total_items": 2,
+      "actionable_count": 0,
+      "confirmation_count": 2
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "표지 전체 분위기는 좋은데, 제목이 좀 묻히는 느낌이에요.",
+          "마케팅팀에서 좀 더 눈에 띄었으면 한다고 해서요."
+        ],
+        "request": "표지 제목이 배경에 묻히지 않고 더 눈에 띄었으면 합니다.",
+        "requester": "마케팅팀",
+        "requester_status": "identified",
+        "interpretations": [
+          "제목 글자 크기 확대",
+          "제목 색상 대비 강화",
+          "제목 주변 배경 정리로 돋보이게 처리"
+        ],
+        "confidence": "low",
+        "confidence_reason": "제목이 묻힌다는 문제와 주체는 명확하지만 구체적 수정 방법이 제시되지 않았습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "제목을 더 눈에 띄게 할 때 크기를 키우는 것과 색이나 대비를 조정하는 것 중 어느 방향으로 진행할까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 저번에 말씀드린 대로 저자 이름은 조금 작게 가면 좋겠습니다."
+        ],
+        "request": "저자 이름을 조금 작게 조정해 주세요.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "대상과 방향은 명확하지만 이전 피드백을 참조하는데 해당 피드백이 제공되지 않아 대조할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_provided",
+        "questions": [
+          "저번에 말씀하신 저자 이름 크기 축소의 정도를 다시 한번 알려주실 수 있을까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "저자 이름 크기에 관해 저번에 말씀하신 이전 피드백 내용"
+      ],
+      "notes": [
+        "문장 1에는 표지 전체 분위기에 대한 칭찬이 포함되어 있으나 수정 요청과 같은 문장이라 분리하지 않았습니다."
+      ]
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "medium",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 3718,
+      "output": 1154,
+      "cacheRead": 4160,
+      "cacheWrite": 0,
+      "totalTokens": 9032,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 8913
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 60,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 566,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 1038,
+    "basis": "measured",
+    "daily_used": 3211,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 10.54,
+  "_started_utc": "2026-11-07T20:49:14"
+}

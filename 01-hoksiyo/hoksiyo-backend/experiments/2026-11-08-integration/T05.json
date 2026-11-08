@@ -1,0 +1,89 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "no_revision_request",
+      "summary": "수정 요청이 없는 피드백입니다.",
+      "total_items": 0,
+      "actionable_count": 0,
+      "confirmation_count": 0
+    },
+    "items": [],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [
+        "시안 잘 받았습니다!",
+        "색감이 정말 마음에 들어요.",
+        "덕분에 팀 분위기도 좋아졌어요.",
+        "감사합니다."
+      ],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": []
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 2272,
+      "output": 81,
+      "cacheRead": 1024,
+      "cacheWrite": 0,
+      "totalTokens": 3377,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 3630
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 178,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 684,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 355,
+    "basis": "measured",
+    "daily_used": 355,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 14.97,
+  "_started_utc": "2026-11-08T03:16:07",
+  "_used_before": 0,
+  "_W": 6000
+}

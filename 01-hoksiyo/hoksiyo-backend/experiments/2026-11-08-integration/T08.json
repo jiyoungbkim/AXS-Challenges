@@ -1,0 +1,133 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《작은 가게의 하루》 삽화"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "출판사 편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "2장 삽화의 하늘 색 변경 요청과 왼쪽 부분의 답답함 지적 두 가지 수정 요청이 있습니다.",
+      "total_items": 2,
+      "actionable_count": 1,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "2장 삽화의 하늘 색을 노을빛 주황으로 바꿔주세요."
+        ],
+        "request": "2장 삽화의 하늘 색을 노을빛 주황으로 변경해 주세요.",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "high",
+        "confidence_reason": "수정 대상(2장 삽화 하늘 색)과 방향(노을빛 주황)이 모두 명확하게 제시되어 있습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 여기 왼쪽 부분이 좀 답답해 보이네요."
+        ],
+        "request": "삽화 왼쪽 부분이 답답해 보이는 문제를 해결해 주세요.",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [
+          "왼쪽 구성 요소를 줄이거나 배치를 조정해 여백을 확보",
+          "왼쪽 배경이나 색·명암을 밝게 처리해 답답한 느낌 완화",
+          "왼쪽 캐릭터나 사물의 크기를 축소해 시각적 여유 확보"
+        ],
+        "confidence": "low",
+        "confidence_reason": "위치 지시어 '여기'로는 어떤 삽화의 어느 부분인지 특정할 수 없고, '답답해 보인다'는 문제 현상만 있어 해결 방법이 열려 있습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "답답하게 보이는 '여기 왼쪽 부분'이 어떤 부분인지 시안을 보며 짚어주실 수 있나요?",
+          "답답함을 완화하기 위해 왼쪽 요소를 줄이는 방식과 색·명암을 조정하는 방식 중 어느 쪽을 원하시나요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "'여기 왼쪽 부분'이 가리키는 정확한 위치와 대상"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 372,
+      "output": 642,
+      "cacheRead": 2944,
+      "cacheWrite": 0,
+      "totalTokens": 3958,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 3259
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 80,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 586,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 379,
+    "basis": "measured",
+    "daily_used": 4997,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 5.09,
+  "_started_utc": "2026-11-07T22:18:36",
+  "_used_before": 4617.1329088,
+  "_W": 4000
+}

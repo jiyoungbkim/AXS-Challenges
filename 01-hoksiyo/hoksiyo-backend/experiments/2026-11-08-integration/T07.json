@@ -1,0 +1,112 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "무엇을 어떻게 고쳐야 하는지 구체적 지시 없이 전체 재작업을 요청하는 피드백입니다. 수정 대상과 방향을 특정할 수 없어 확인이 필요합니다.",
+      "total_items": 1,
+      "actionable_count": 0,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "음... 다시 해주세요."
+        ],
+        "request": "구체적인 이유나 방향 없이 삽화를 다시 해 달라는 요청",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [],
+        "confidence": "low",
+        "confidence_reason": "수정 대상과 방향이 전혀 명시되지 않아 텍스트만으로는 해석이 여러 갈래이고 대상을 특정할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "어떤 부분이 마음에 안 드시는지 구체적으로 알려주실 수 있을까요? (예: 구도, 캐릭터 표정, 색감, 분위기 등)",
+          "삽화 전체를 새로 그려야 할까요, 아니면 특정 부분만 수정하면 될까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "어떤 부분을 고쳐야 하는지에 대한 구체적 지시",
+        "재작업의 범위(전체 삽화인지 특정 장면인지)",
+        "수정 방향(구도, 표정, 색감 등)에 대한 의견"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 282,
+      "output": 406,
+      "cacheRead": 2944,
+      "cacheWrite": 0,
+      "totalTokens": 3632,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 2291
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 75,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 581,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 273,
+    "basis": "measured",
+    "daily_used": 5712,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 3.64,
+  "_started_utc": "2026-11-07T22:18:50",
+  "_used_before": 5438.635067800001,
+  "_W": 3000
+}
