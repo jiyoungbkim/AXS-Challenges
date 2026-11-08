@@ -1,0 +1,105 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "저자 이름의 크기를 소폭 줄여달라는 수정 요청입니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "저자 이름을 지금보다 조금 작게 줄여달라는 요청입니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "수정 대상(저자 이름)은 명확하지만 '조금'이라는 정도가 열려 있어 소폭 축소로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "mode": "C",
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 289,
+      "output": 205,
+      "cacheRead": 2944,
+      "cacheWrite": 0,
+      "totalTokens": 3438,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 5150
+  },
+  "reply_text": "완료",
+  "reply_metadata": {
+    "response_usage": {
+      "input": 506,
+      "output": 134,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "totalTokens": 640,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "usage": {
+    "neurons": 196,
+    "basis": "measured",
+    "daily_used": 2521,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 8.43,
+  "_started_utc": "2026-11-08T03:53:09",
+  "_used_before": 2324.906059,
+  "_W": 3000
+}

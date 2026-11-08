@@ -171,9 +171,9 @@
 
 **기대 결과**
 
-| # | 항목 | conf | status |
-|---|---|---|---|
-| 1 | 전체 재작업 요청 (대상 불명) | 낮음 | `needs_confirmation` |
+| # | 항목 | requester | conf | status |
+|---|---|---|---|---|
+| 1 | 전체 재작업 요청 (대상 불명) | 독립출판 작가 (`identified`) | 낮음 | `needs_confirmation` |
 
 **검증 포인트**
 - 착수 가능 항목이 없다.
