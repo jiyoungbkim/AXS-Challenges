@@ -40,10 +40,11 @@
 | 개발 서버 | `npm run dev` (http://localhost:5173) | `npm run dev` |
 | 타입 체크 | `npm run check:types` | `npx tsc -b` |
 | 린트 | 없음 (확인 필요) | `npm run lint` (oxlint) |
-| 테스트 | 없음 (테스트 러너 미설정, 확인 필요) | 없음 (확인 필요) |
+| 테스트 | `scripts/` (README의 Test scripts 참고) | 없음 (확인 필요) |
 | 빌드 / 배포 | `npm run build` / `npm run deploy` | `npm run build` / `npm run deploy` |
 
 - 백엔드 에이전트 호출 예시는 `hoksiyo-backend/README.md`에 있다.
+- `scripts/offline-check.mts`는 모델을 호출하지 않으므로 백엔드 변경 후 매번 돌려도 된다. `scripts/run-cases.mts`는 Neurons를 쓴다.
 - `cloudflare/...` 모델은 Worker 안에서만 동작한다. `npx flue run`은 쓰지 말고 `npm run dev` + curl로 테스트한다.
 - Workers AI는 로컬 개발 중에도 실제 Cloudflare 계정으로 요청이 나간다 (`npx wrangler login` 필요).
 - Flue 문서: `npx flue docs search <query>`
@@ -84,8 +85,8 @@
   (분석(harness) `ANALYSIS_MODEL` = `@cf/zai-org/glm-5.3`, thinking 수준 `ANALYSIS_THINKING` = `low`,
   메인 턴 `MAIN_TURN_MODEL` = `@cf/zai-org/glm-4.7-flash`).
   모델을 바꿀 때는 이 파일만 고친다. glm-5.3은 Workers Paid가 필요하고, Free 플랜에서 막힌 모델은 403 오류가 난다.
-  (`src/agents/hello.ts`의 `useModel` 값은 예제 에이전트 전용이다.)
-- Valibot은 직접 의존성이 아니다(@flue/runtime의 간접 의존성). 직접 import하려면 먼저 package.json에 추가할지 확인한다.
+  (`src/agents/hello.ts`는 라우트에서 제외됨. DO migration(v1)에 등록된 클래스라 파일은 삭제하지 않는다.)
+- Valibot 1.5.0은 직접 의존성이다(`package.json`에 고정).
 - 변경 후에는 해당 폴더의 타입 체크를 실행하고, 프론트엔드라면 린트도 실행한다.
 - 이미지 분석, 답장 작성·전송, 견적 판단, 피드백 저장·자동 대조는 MVP 범위 밖이다 (`product-spec.md` 4-6).
   단, 사용자가 입력한 이전 피드백과의 대조(`prior_feedback_reference`)는 범위 안이다.
