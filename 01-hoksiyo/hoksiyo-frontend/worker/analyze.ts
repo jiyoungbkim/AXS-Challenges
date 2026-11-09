@@ -7,7 +7,8 @@ import { mockBackend } from './mock.ts';
 
 const CHANNELS = new Set<string>(['email', 'messenger', 'document']);
 
-// Fields removed from every backend answer (the backend drops them on 11/9).
+// Fields removed from every backend answer. The backend no longer sends them;
+// kept as a guard, and the mock fixtures still carry them to exercise it.
 const STRIPPED_FIELDS = ['reply_text', 'reply_metadata'];
 
 function invalid(issue: string): Response {
@@ -56,10 +57,6 @@ export async function analyze(request: Request, env: Env): Promise<Response> {
   const input = toBackendInput(raw);
   if (typeof input === 'string') return invalid(input);
 
-  // 11/9 백엔드 정리와 함께 삭제: the backend still requires `mode` until its
-  // cleanup. 'C' (runResultMode) is the mode the cleanup keeps.
-  const backendBody = { ...input, mode: 'C' };
-
   let upstream: Response;
   try {
     upstream =
@@ -68,7 +65,7 @@ export async function analyze(request: Request, env: Env): Promise<Response> {
         : await env.BACKEND.fetch('https://hoksiyo-backend/api/analyze', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(backendBody),
+            body: JSON.stringify(input),
           });
   } catch {
     return Response.json({ error: 'backend_unreachable' }, { status: 502 });

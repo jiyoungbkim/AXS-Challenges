@@ -60,7 +60,6 @@ app.post('/api/analyze', async (c) => {
 		);
 	}
 
-	const analysisModel = input.model ?? ANALYSIS_MODEL;
 	const startedAt = Date.now();
 	let finished = false;
 	let harnessUsage: TokenUsage | undefined;
@@ -84,8 +83,6 @@ app.post('/api/analyze', async (c) => {
 			body = {
 				analysis: reply.data.analysis?.at(-1) ?? null,
 				meta,
-				reply_text: reply.text, // 실험용, 배포 전 제거
-				reply_metadata: reply.metadata ?? null, // 실험용, 배포 전 제거
 			};
 		} catch (error) {
 			// The submission itself failed (e.g. the 240s durability timeout), so no meta was written.
@@ -102,7 +99,7 @@ app.post('/api/analyze', async (c) => {
 		const spent = charge({
 			sentences,
 			config,
-			analysisModel,
+			analysisModel: ANALYSIS_MODEL,
 			mainTurnModel: MAIN_TURN_MODEL,
 			finished,
 			harnessUsage,

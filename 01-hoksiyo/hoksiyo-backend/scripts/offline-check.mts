@@ -128,7 +128,7 @@ for (const n of [12, 13]) {
 	const feedback = Array.from({ length: n }, (_, i) => `문장${i + 1}입니다.`).join(' ');
 	const res = await app.request(
 		'/api/analyze',
-		{ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ project_name: 'x', feedback, mode: 'C' }) },
+		{ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ project_name: 'x', feedback }) },
 		env,
 	);
 	const body = (await res.json()) as { error?: string; max?: number };
@@ -139,6 +139,18 @@ for (const n of [12, 13]) {
 	}
 }
 check('reserve called only for 12', reserves === 1);
+
+// 5. Strict input: the removed experiment fields are unknown now, refused before any reservation.
+for (const extra of [{ mode: 'C' }, { model: '@cf/zai-org/glm-5.3' }]) {
+	const res = await app.request(
+		'/api/analyze',
+		{ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ project_name: 'x', feedback: '문장입니다.', ...extra }) },
+		env,
+	);
+	const body = (await res.json()) as { error?: string };
+	check(`unknown field ${Object.keys(extra)[0]} → 400 invalid_input`, res.status === 400 && body.error === 'invalid_input');
+}
+check('reserve not called for unknown fields', reserves === 1);
 
 console.log(ok ? 'ALL OK' : 'SOME FAILED');
 process.exit(ok ? 0 : 1);

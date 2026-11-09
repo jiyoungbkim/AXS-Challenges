@@ -3,6 +3,10 @@
 	"name": "hoksiyo-backend",
 	"compatibility_date": "2026-06-01",
 	"compatibility_flags": ["nodejs_compat"],
+	// No public URL: the only way in is hoksiyo-frontend's service binding,
+	// which checks the access code first.
+	"workers_dev": false,
+	"preview_urls": false,
 	// Workers Traces shows each agent response as a trace with agent-level
 	// spans: https://flueframework.com/docs/guide/observability/#cloudflare
 	"observability": { "traces": { "enabled": true } },

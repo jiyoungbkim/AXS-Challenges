@@ -23,9 +23,13 @@ for (const file of readdirSync(dir).filter((f) => f.endsWith('.json')).sort()) {
 	const meta = d.meta ?? {};
 	const a = d.analysis;
 	const u = meta.usage;
+	// Records before 2026-11-09 carry the main turn's usage in reply_metadata and
+	// are recomputed; later ones only have the server's charge in usage.neurons.
 	const main = d.reply_metadata?.response_usage;
 	const neurons =
-		(u ? recordedNeurons(meta.model ?? ANALYSIS_MODEL, u) : 0) + (main ? recordedNeurons(MAIN_TURN_MODEL, main) : 0);
+		main || d.usage?.neurons === undefined
+			? (u ? recordedNeurons(meta.model ?? ANALYSIS_MODEL, u) : 0) + (main ? recordedNeurons(MAIN_TURN_MODEL, main) : 0)
+			: d.usage.neurons;
 	total += neurons;
 	console.log(
 		`=== ${file.replace('.json', '')} http=${d._http} outcome=${meta.outcome} thinking=${meta.thinking} ` +

@@ -11,16 +11,14 @@ import {
 } from '@flue/runtime';
 import * as v from 'valibot';
 import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
-import { buildResultSchema, judgmentsOf, LlmAnalysisSchema, type Judgment } from '../analysis/llm-schema.ts';
+import { buildResultSchema, type Judgment } from '../analysis/llm-schema.ts';
 import { ANALYSIS_MODEL, ANALYSIS_THINKING, cloudflareModel, MAIN_TURN_MODEL, type Thinking } from '../analysis/models.ts';
-import { buildAnalysisPrompt, buildRetryPrompt, TEXT_MODE_SUFFIX } from '../analysis/prompt.ts';
-import { splitSentences } from '../analysis/sentences.ts';
-import { issuesToErrors, validate, validateRefs, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
+import { buildAnalysisPrompt } from '../analysis/prompt.ts';
+import { validate, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
 const HARNESS_TIMEOUT_MS = 180_000;
 
-type Mode = 'C' | 'B';
 type Outcome = 'finished' | 'no_finish' | 'give_up' | 'aborted' | 'timeout' | 'error';
 
 interface Attempt {
@@ -31,7 +29,6 @@ interface Attempt {
 }
 
 interface AnalysisMeta {
-	mode: Mode;
 	model: string;
 	thinking: Thinking;
 	outcome: Outcome;
@@ -46,15 +43,13 @@ interface AnalysisMeta {
 
 interface RunResult {
 	analysis?: AnalysisResult;
-	meta: Omit<AnalysisMeta, 'mode' | 'model' | 'thinking' | 'duration_ms'>;
+	meta: Omit<AnalysisMeta, 'model' | 'thinking' | 'duration_ms'>;
 }
 
 interface ModelOptions {
 	model: string;
 	thinkingLevel: Thinking;
 }
-
-type AnalyzeFeedbackInput = AnalysisInput & { mode: Mode; model?: string };
 
 function finalize(input: AnalysisInput, analysis: AnalysisResult | undefined, meta: RunResult['meta']): RunResult {
 	if (!analysis) return { meta };
@@ -99,103 +94,26 @@ async function runResultMode(harness: FlueHarness, input: AnalysisInput, options
 	}
 }
 
-function parseJson(text: string): unknown {
-	const unfenced = text.replace(/```(?:json)?/g, '');
-	const start = unfenced.indexOf('{');
-	const end = unfenced.lastIndexOf('}');
-	if (start === -1 || end <= start) throw new Error('JSON 객체를 찾지 못했습니다.');
-	return JSON.parse(unfenced.slice(start, end + 1));
-}
-
-function checkText(
-	input: AnalysisInput,
-	text: string,
-): { analysis?: AnalysisResult; errors: ValidationError[]; judgments: Judgment[] | null } {
-	let raw: unknown;
-	try {
-		raw = parseJson(text);
-	} catch (error) {
-		return { errors: [{ cond: 'parse', message: error instanceof Error ? error.message : String(error) }], judgments: null };
-	}
-	const parsed = v.safeParse(LlmAnalysisSchema, raw);
-	if (!parsed.success) return { errors: issuesToErrors(parsed.issues), judgments: null };
-	const judgments = judgmentsOf(parsed.output);
-	const refErrors = validateRefs(parsed.output, splitSentences(input.feedback).length);
-	if (refErrors.length > 0) return { errors: refErrors, judgments };
-	const analysis = assemble(input, parsed.output);
-	return { analysis, errors: validate(analysis, input).errors, judgments };
-}
-
-function addUsage(a: PromptUsage | undefined, b: PromptUsage): PromptUsage {
-	if (!a) return b;
-	return {
-		input: a.input + b.input,
-		output: a.output + b.output,
-		cacheRead: a.cacheRead + b.cacheRead,
-		cacheWrite: a.cacheWrite + b.cacheWrite,
-		totalTokens: a.totalTokens + b.totalTokens,
-		cost: {
-			input: a.cost.input + b.cost.input,
-			output: a.cost.output + b.cost.output,
-			cacheRead: a.cost.cacheRead + b.cost.cacheRead,
-			cacheWrite: a.cost.cacheWrite + b.cost.cacheWrite,
-			total: a.cost.total + b.cost.total,
-		},
-	};
-}
-
-// B: plain text JSON, parsed and validated in code, re-requested once on failure.
-async function runTextMode(harness: FlueHarness, input: AnalysisInput, options: ModelOptions): Promise<RunResult> {
-	const attempts: Attempt[] = [];
-	let usage: PromptUsage | undefined;
-	// One budget for the first request and the retry together.
-	const timeout = AbortSignal.timeout(HARNESS_TIMEOUT_MS);
-	try {
-		let response = await harness.prompt(buildAnalysisPrompt(input) + TEXT_MODE_SUFFIX, { ...options, signal: timeout });
-		usage = addUsage(usage, response.usage);
-		let checked = checkText(input, response.text);
-		attempts.push({ n: 1, errors: checked.errors, judgments: checked.judgments });
-		if (checked.errors.length > 0) {
-			response = await harness.prompt(buildRetryPrompt(checked.errors), { ...options, signal: timeout });
-			usage = addUsage(usage, response.usage);
-			checked = checkText(input, response.text);
-			attempts.push({ n: 2, errors: checked.errors, judgments: checked.judgments });
-		}
-		const outcome: Outcome = checked.errors.length === 0 ? 'finished' : 'aborted';
-		return finalize(input, checked.analysis, { attempts, final_errors: checked.errors, warnings: [], outcome, usage });
-	} catch (error) {
-		const base = { attempts, final_errors: [], warnings: [], usage };
-		if (timeout.aborted) {
-			return { meta: { ...base, outcome: 'timeout', outcome_detail: `harness ${HARNESS_TIMEOUT_MS / 1000}초 초과` } };
-		}
-		return { meta: { ...base, outcome: 'error', outcome_detail: String(error) } };
-	}
-}
-
 export function AnalyzeFeedback() {
 	useModel(cloudflareModel(MAIN_TURN_MODEL));
 	const writeAnalysis = useDataWriter('analysis');
 	const writeMeta = useDataWriter('analysis_meta');
-	const input = useInitialData<AnalyzeFeedbackInput>();
+	const input = useInitialData<AnalysisInput>();
 
 	useAgentStart(async ({ harness }) => {
 		const startedAt = Date.now();
-		// 실험용, 배포 전 제거: per-request harness model.
-		const model = input.model ?? ANALYSIS_MODEL;
-		const options: ModelOptions = { model: cloudflareModel(model), thinkingLevel: ANALYSIS_THINKING };
-		const run =
-			input.mode === 'C' ? await runResultMode(harness, input, options) : await runTextMode(harness, input, options);
+		const options: ModelOptions = { model: cloudflareModel(ANALYSIS_MODEL), thinkingLevel: ANALYSIS_THINKING };
+		const run = await runResultMode(harness, input, options);
 		if (run.analysis) writeAnalysis(run.analysis);
 		writeMeta({
-			mode: input.mode,
-			model,
+			model: ANALYSIS_MODEL,
 			thinking: ANALYSIS_THINKING,
 			...run.meta,
 			duration_ms: Date.now() - startedAt,
 		} satisfies AnalysisMeta);
 	});
 
-	// 실험용, 배포 전 제거: records the response's own usage so the main turn's cost can be measured.
+	// 정식 기능: 사용량 카운터용. Records the main turn's own usage; app.ts charges it to the daily budget.
 	useResponseFinish(({ response }) => ({ response_usage: response.usage }));
 
 	// The harness shares this system prompt, so it stays neutral. The "reply 완료"
@@ -207,12 +125,11 @@ export function AnalyzeFeedback() {
 // turns, so it backstops the whole submission including the main turn.
 AnalyzeFeedback.durability = { maxAttempts: 2, timeoutMs: 240_000 };
 
-AnalyzeFeedback.initialData = v.object({
+// Strict: an unknown field is a 400 invalid_input before any reservation.
+AnalyzeFeedback.initialData = v.strictObject({
 	project_name: v.string(),
 	sender: v.optional(v.string()),
 	channel: v.optional(v.picklist(['email', 'messenger', 'document'])),
 	feedback: v.string(),
 	prior_feedback: v.optional(v.string()),
-	mode: v.picklist(['C', 'B']), // 실험용, 배포 전 제거
-	model: v.optional(v.string()), // 실험용, 배포 전 제거
 });

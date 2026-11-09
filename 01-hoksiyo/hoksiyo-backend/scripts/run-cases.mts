@@ -56,7 +56,7 @@ for (const id of order) {
 	const res = await fetch(`${BASE}/api/analyze`, {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
-		body: JSON.stringify({ ...input, mode: 'C' }),
+		body: JSON.stringify(input),
 		signal: AbortSignal.timeout(300_000),
 	});
 	const body = (await res.json().catch(() => ({}))) as Record<string, any>;

@@ -3,7 +3,7 @@
 import { senderOf } from './assemble.ts';
 import { DEGREE_EXPRESSIONS, DEICTIC_EXPRESSIONS, quoteList } from './expressions.ts';
 import { splitSentences } from './sentences.ts';
-import type { AnalysisInput, ValidationError } from './validate.ts';
+import type { AnalysisInput } from './validate.ts';
 
 const RULES = `너는 프리랜서 일러스트레이터가 받은 수정 피드백을 분석하는 에이전트 '혹시요'다.
 모르는 내용을 추측해서 단정하지 않는다. 판단이 어려우면 확인 필요로 넘긴다. '높음'으로 잘못 분류하는 것이 가장 큰 오류다.
@@ -97,16 +97,4 @@ ${sentences}
 
 [이전 피드백]
 ${prior}`;
-}
-
-export const TEXT_MODE_SUFFIX = `
-
-위 [출력 JSON 형태]의 JSON 객체 하나만 출력한다. 코드블록, 설명, 앞뒤 문장 없이 { 로 시작해 } 로 끝나야 한다.`;
-
-export function buildRetryPrompt(errors: ValidationError[]): string {
-	const list = errors.map((error) => `- [조건 ${error.cond}] ${error.message}`).join('\n');
-	return `직전 응답에 다음 오류가 있다.
-${list}
-
-오류를 고친 전체 JSON 객체 하나만 다시 출력한다. 코드블록, 설명 없이 { 로 시작해 } 로 끝나야 한다.`;
 }
