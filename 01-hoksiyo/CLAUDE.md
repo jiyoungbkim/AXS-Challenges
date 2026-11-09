@@ -7,13 +7,19 @@
 
 - 백엔드: Flue 2.3 + Hono + Workers AI (Durable Objects)
 - 프론트엔드: React 19 + Vite + Cloudflare Worker
-- 현재 상태 (2026-11-08)
+- 현재 상태 (2026-11-09)
   - 백엔드: 분석 에이전트 `AnalyzeFeedback` 완성(glm-5.3, thinking low). `docs/test-cases.md` T01~T10 통합 테스트 통과
     (`hoksiyo-backend/experiments/2026-11-08-integration`, `-revalidate`).
   - 사용량 한도(`UsageCounter` Durable Object) 동작 중. 하루 9,000 Neurons, 분석 1건당 W(n) = 1,800 + 400n 예약.
   - 테스트 도구: `hoksiyo-backend/scripts/` (사용법은 `hoksiyo-backend/README.md` "Test scripts")
-  - 프론트엔드: 아직 Cloudflare React 템플릿 그대로이고 백엔드와 연결되어 있지 않음. **다음 작업은 프론트엔드.**
-  - 배포 전 정리 목록은 아래 "확인 필요"의 "배포 전 정리" 메모 참고.
+  - 프론트엔드: 접속 코드 화면, 입력 화면, 결과·오류 화면 완성. 프론트 Worker가 service binding(`BACKEND`)으로 백엔드 `/api/analyze`를 호출한다.
+  - Cloudflare 배포 완료: 프론트 Version `986138f3`, 백엔드 Version `f01c159d`.
+    백엔드는 workers.dev·route 없이 프론트의 service binding으로만 호출된다.
+  - 배포본 스모크 테스트 8개 항목 통과
+    - curl 4개: 프론트 루트 200·HTML / 백엔드 workers.dev `GET /api/usage` 404 / 쿠키 없는 `POST /api/analyze` 401 / 틀린 코드 `POST /api/session` 401·Set-Cookie 없음
+    - 브라우저 4개: 맞는 코드 로그인 200 / T01 분석 200·판정 기대와 일치 / 대시보드 Workers AI 사용량 증가 확인 / 13문장 입력 400 거절·분할 안내 표시
+    - 배포본 실제 분석 1건(T01) 약 730 Neurons
+  - **다음 작업: 11/12~15 사용자 테스트.** 테스트 후 정리 목록은 아래 "테스트 후 정리" 참고.
 
 ## 폴더 구조
 ```
@@ -23,13 +29,15 @@
 │   ├── src/app.ts          # Hono 라우트 맵. 모든 라우트를 여기서 명시적으로 mount
 │   ├── src/agents/         # 'use agent' 모듈. 대문자로 시작하는 export 함수 = 에이전트
 │   ├── src/cloudflare.ts   # Worker 레벨 export (DO 클래스, cron 등)
-│   ├── wrangler.jsonc      # AI 바인딩, DO migrations
+│   ├── wrangler.jsonc      # AI 바인딩, DO migrations, 사용량 vars. workers_dev·preview_urls false
 │   ├── flue.config.ts      # target: cloudflare
 │   └── AGENTS.md           # Flue 프로젝트 규칙
 └── hoksiyo-frontend/
-    ├── src/                # React 앱
-    ├── worker/index.ts     # 프론트 Worker (현재 /api/ 더미 응답)
-    └── wrangler.jsonc
+    ├── src/                # React 앱 (접속 코드·입력·결과 화면)
+    ├── worker/index.ts     # 프론트 Worker 라우트: /api/session, POST /api/analyze만 처리
+    ├── worker/session.ts   # 접속 코드 확인, 세션 쿠키(HMAC)
+    ├── worker/analyze.ts   # 입력 정리 후 BACKEND binding으로 전달 (MOCK_ANALYZE=1이면 mock.ts·fixtures.ts)
+    └── wrangler.jsonc      # services: BACKEND → hoksiyo-backend
 ```
 
 ## 실행 명령어
@@ -37,7 +45,7 @@
 
 | 목적 | hoksiyo-backend | hoksiyo-frontend |
 |---|---|---|
-| 개발 서버 | `npm run dev` (http://localhost:5173) | `npm run dev` |
+| 개발 서버 | `npm run dev` (http://localhost:5173) | `npm run dev` (http://localhost:5174) |
 | 타입 체크 | `npm run check:types` | `npx tsc -b` |
 | 린트 | 없음 (확인 필요) | `npm run lint` (oxlint) |
 | 테스트 | `scripts/` (README의 Test scripts 참고) | 없음 (확인 필요) |
@@ -47,6 +55,8 @@
 - `scripts/offline-check.mts`는 모델을 호출하지 않으므로 백엔드 변경 후 매번 돌려도 된다. `scripts/run-cases.mts`는 Neurons를 쓴다.
 - `cloudflare/...` 모델은 Worker 안에서만 동작한다. `npx flue run`은 쓰지 말고 `npm run dev` + curl로 테스트한다.
 - Workers AI는 로컬 개발 중에도 실제 Cloudflare 계정으로 요청이 나간다 (`npx wrangler login` 필요).
+- 프론트에서 실제 분석을 하려면 두 개발 서버를 함께 띄우고 `hoksiyo-frontend/.dev.vars`의 `MOCK_ANALYZE`를 `0`으로 둔다
+  (`1`이면 `worker/fixtures.ts` mock 응답, Neurons 안 씀). `.dev.vars`가 있으면 셸 환경변수로 덮어쓸 수 없다.
 - Flue 문서: `npx flue docs search <query>`
 
 ## 문서 안내 (docs/)
@@ -85,7 +95,8 @@
   (분석(harness) `ANALYSIS_MODEL` = `@cf/zai-org/glm-5.3`, thinking 수준 `ANALYSIS_THINKING` = `low`,
   메인 턴 `MAIN_TURN_MODEL` = `@cf/zai-org/glm-4.7-flash`).
   모델을 바꿀 때는 이 파일만 고친다. glm-5.3은 Workers Paid가 필요하고, Free 플랜에서 막힌 모델은 403 오류가 난다.
-  (`src/agents/hello.ts`는 라우트에서 제외됨. DO migration(v1)에 등록된 클래스라 파일은 삭제하지 않는다.)
+  (`src/agents/hello.ts`는 라우트에서 제외됨. DO migration(v1)에 등록된 클래스라 파일은 삭제하지 않는다.
+  삭제는 아래 "테스트 후 정리"에서 마이그레이션과 함께 진행한다.)
 - Valibot 1.5.0은 직접 의존성이다(`package.json`에 고정).
 - 변경 후에는 해당 폴더의 타입 체크를 실행하고, 프론트엔드라면 린트도 실행한다.
 - 이미지 분석, 답장 작성·전송, 견적 판단, 피드백 저장·자동 대조는 MVP 범위 밖이다 (`product-spec.md` 4-6).
@@ -94,16 +105,15 @@
 
 ## 확인 필요
 - 테스트 러너(예: vitest)와 백엔드 린트 도입 여부
-- 프론트엔드에서 백엔드를 호출하는 방식 (service binding, 직접 fetch, CORS)
-- 분석 에이전트의 출력 형식을 강제하는 방법 (Flue 구조화 출력 기능 여부. `npx flue docs`로 확인)
-- 백엔드와 프론트엔드 개발 서버를 동시에 띄울 때 포트(5173) 충돌 여부
 
-### 배포 전 정리 (11/9 첫 배포 전에 한 번에 진행. 그 전에는 코드를 지우지 않는다)
-`실험용, 배포 전 제거` 주석이 달린 코드를 아래 방향으로 정리한다.
-- `model` 입력과 관련 코드 삭제 (`analyze-feedback.ts`의 `input.model ?? ANALYSIS_MODEL`, `app.ts`의 같은 식 포함)
-- `useResponseFinish`는 유지하고, 주석을 "정식 기능: 사용량 카운터용"으로 변경 (`app.ts`가 메인 턴 usage를 이 값으로 계산함)
-- `mode` 입력과 B 모드 관련 함수(`runTextMode`, `checkText`, `parseJson`, `addUsage`, `TEXT_MODE_SUFFIX`, `buildRetryPrompt`) 모두 삭제
-- 응답의 `reply_text`, `reply_metadata` 삭제
-- 입력 스키마를 `v.strictObject`로 바꿔 모르는 필드는 400으로 거부
-- 백엔드 `wrangler.jsonc`에 `"workers_dev": false`, `"preview_urls": false` 추가 (공개 URL로 접속 코드를 우회하지 못하게. service binding은 그대로 동작). 프론트 `worker/analyze.ts`의 임시 `mode: 'C'`도 함께 삭제
-- 배포 후 스모크 테스트에서 배포 환경이 mock 응답을 내지 않는지 확인 (`MOCK_ANALYZE`는 `.dev.vars`에만 있어야 함. 예: 원문 `mock:daily_limit`이 429 mock이 아니라 실제 분석으로 처리되는지)
+### 배포 전 정리 (완료, 2026-11-09)
+실험 코드(`model`·`mode` 입력, B 모드 함수, 응답의 `reply_text`·`reply_metadata`, 프론트의 임시 `mode: 'C'`)를 삭제했고,
+입력 스키마를 `v.strictObject`로 바꿨으며, 백엔드 `workers_dev`·`preview_urls`를 `false`로 설정했다.
+배포본이 mock 응답을 내지 않는 것도 확인했다(`MOCK_ANALYZE`는 `hoksiyo-frontend/.dev.vars`에만 있음).
+
+### 테스트 후 정리 (11/12~15 사용자 테스트 뒤에 진행)
+- `src/agents/hello.ts` 삭제와 DO 삭제 마이그레이션: `wrangler.jsonc` `migrations`에 **새 tag**로
+  `deleted_classes: ["FlueHelloAgent"]` 추가. 이때 "작업 규칙"의 "hello.ts는 파일을 삭제하지 않는다" 문구도 함께 갱신한다.
+- 질문 복사 형식
+- 원문 강조(형광) 번짐
+- 판정 안정성: 같은 피드백에 다른 판정이 나오는 경우
