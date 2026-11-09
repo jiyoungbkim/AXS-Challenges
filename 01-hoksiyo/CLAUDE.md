@@ -58,6 +58,15 @@
 - 프론트에서 실제 분석을 하려면 두 개발 서버를 함께 띄우고 `hoksiyo-frontend/.dev.vars`의 `MOCK_ANALYZE`를 `0`으로 둔다
   (`1`이면 `worker/fixtures.ts` mock 응답, Neurons 안 씀). `.dev.vars`가 있으면 셸 환경변수로 덮어쓸 수 없다.
 - Flue 문서: `npx flue docs search <query>`
+- `.dev.vars` 키 (값은 어디에도 쓰지 않는다). 백엔드는 `.dev.vars`가 필요 없다.
+
+  | 키 | 파일 |
+  |---|---|
+  | `ACCESS_CODE` | `hoksiyo-frontend/.dev.vars` |
+  | `MOCK_ANALYZE` | `hoksiyo-frontend/.dev.vars` |
+- 배포는 백엔드를 먼저 하고 프론트를 한다(프론트의 `BACKEND` binding이 `hoksiyo-backend`를 가리킴).
+  배포 환경의 접속 코드는 프론트 폴더에서 `npx wrangler secret put ACCESS_CODE`로 설정한다.
+  `MOCK_ANALYZE`는 배포 환경에는 설정하지 않는다.
 
 ## 문서 안내 (docs/)
 문서 내용을 여기에 옮기지 않는다. 작업 전에 해당 문서를 직접 읽는다.
