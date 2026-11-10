@@ -7,19 +7,22 @@
 
 - 백엔드: Flue 2.3 + Hono + Workers AI (Durable Objects)
 - 프론트엔드: React 19 + Vite + Cloudflare Worker
-- 현재 상태 (2026-11-09)
+- 현재 상태 (2026-11-10)
   - 백엔드: 분석 에이전트 `AnalyzeFeedback` 완성(glm-5.3, thinking low). `docs/test-cases.md` T01~T10 통합 테스트 통과
     (`hoksiyo-backend/experiments/2026-11-08-integration`, `-revalidate`).
   - 사용량 한도(`UsageCounter` Durable Object) 동작 중. 하루 9,000 Neurons, 분석 1건당 W(n) = 1,800 + 400n 예약.
   - 테스트 도구: `hoksiyo-backend/scripts/` (사용법은 `hoksiyo-backend/README.md` "Test scripts")
   - 프론트엔드: 접속 코드 화면, 입력 화면, 결과·오류 화면 완성. 프론트 Worker가 service binding(`BACKEND`)으로 백엔드 `/api/analyze`를 호출한다.
-  - Cloudflare 배포 완료: 프론트 Version `986138f3`, 백엔드 Version `f01c159d`.
+  - Cloudflare 배포 (11/10): 백엔드 Version `a3842ff9`, 프론트 Version `819a2647`.
     백엔드는 workers.dev·route 없이 프론트의 service binding으로만 호출된다.
-  - 배포본 스모크 테스트 8개 항목 통과
-    - curl 4개: 프론트 루트 200·HTML / 백엔드 workers.dev `GET /api/usage` 404 / 쿠키 없는 `POST /api/analyze` 401 / 틀린 코드 `POST /api/session` 401·Set-Cookie 없음
+    - 백엔드: 1-A(requester 프롬프트 보강)·2-1(인용 불일치 warning) 배포 완료
+    - 프론트: 질문 전체 복사를 원문 인용 묶음 형식으로 변경(화면 번호 순서 유지)
+  - 11/10 배포본 확인: 아래 "배포 스모크" curl 4개 통과, 브라우저 로그인·T01 판정·전체 복사·원문 강조 정상
+  - 11/9 배포본 스모크 테스트 8개 항목 통과
+    - curl 4개: 아래 "배포 스모크"와 같음
     - 브라우저 4개: 맞는 코드 로그인 200 / T01 분석 200·판정 기대와 일치 / 대시보드 Workers AI 사용량 증가 확인 / 13문장 입력 400 거절·분할 안내 표시
     - 배포본 실제 분석 1건(T01) 약 730 Neurons
-  - **다음 작업: 11/12~15 사용자 테스트.** 테스트 후 정리 목록은 아래 "테스트 후 정리" 참고.
+  - **다음 작업: 11/11 중간 공유, 11/12~15 사용자 테스트.** 테스트 후 정리 목록은 아래 "테스트 후 정리" 참고.
 
 ## 폴더 구조
 ```
@@ -67,6 +70,16 @@
 - 배포는 백엔드를 먼저 하고 프론트를 한다(프론트의 `BACKEND` binding이 `hoksiyo-backend`를 가리킴).
   배포 환경의 접속 코드는 프론트 폴더에서 `npx wrangler secret put ACCESS_CODE`로 설정한다.
   `MOCK_ANALYZE`는 배포 환경에는 설정하지 않는다.
+
+### 배포 스모크 (모델 호출 없음)
+`FRONT`는 프론트 workers.dev 주소, `BACK`은 백엔드 workers.dev 주소(꺼져 있음)다. 접속 코드는 넣지 않는다(4번은 일부러 틀린 값).
+
+| # | 명령 | 기대값 |
+|---|---|---|
+| 1 | `curl -sS -o /dev/null -w '%{http_code} %{content_type}\n' "$FRONT/"` | 200, `text/html` |
+| 2 | `curl -sS -w '\n%{http_code}\n' "$BACK/api/usage"` | 200 아님, 백엔드 JSON 아님 (11/10: 404, `error code: 1042`) |
+| 3 | `curl -sS -w '\n%{http_code}\n' -X POST "$FRONT/api/analyze" -H 'content-type: application/json' -d '{"project_name":"smoke","feedback":"스모크 테스트."}'` | 401, `{"error":"access_required"}` |
+| 4 | `curl -sS -D - -o /dev/null -X POST "$FRONT/api/session" -H 'content-type: application/json' -d '{"code":"wrong-smoke-code"}' \| grep -iE '^HTTP\|^set-cookie'` | `HTTP/2 401`, `set-cookie` 줄 없음 |
 
 ## 문서 안내 (docs/)
 문서 내용을 여기에 옮기지 않는다. 작업 전에 해당 문서를 직접 읽는다.
@@ -123,8 +136,9 @@
 ### 테스트 후 정리 (11/12~15 사용자 테스트 뒤에 진행)
 - `src/agents/hello.ts` 삭제와 DO 삭제 마이그레이션: `wrangler.jsonc` `migrations`에 **새 tag**로
   `deleted_classes: ["FlueHelloAgent"]` 추가. 이때 "작업 규칙"의 "hello.ts는 파일을 삭제하지 않는다" 문구도 함께 갱신한다.
-- 질문 복사 형식
-- 원문 강조(형광) 번짐
+- 원문 강조의 알려진 한계: 강조는 문장 단위이고 응답의 `original_text`는 문자열이라 ① 한 문장에 요청이 둘이면
+  한 항목을 골라도 문장 전체(다른 항목 부분 포함)가 강조되고(T10 문장 1), ② 같은 문장이 원문에 여러 번 나오면 모든 사본이 강조된다.
+  응답에 문장 번호를 담는 방향은 테스트 뒤 검토한다(스키마 변경이므로 사용자 확인 후).
 - 판정 안정성: 같은 피드백에 다른 판정이 나오는 경우. 11/10 측정: confidence·status는 stability 4케이스×2회와 회귀 T01~T10에서 모두 기대값과 일치하고 회차 간 같음. 반복 횟수는 적음
 - 판정 외 필드 위치: T04 가정한 정도가 confidence_reason이 아닌 notes에 들어감, T01 notes에 칭찬 처리 설명, T10 #2 confidence_reason이 다른 항목의 표현('좀 더')을 근거로 인용
 - `docs/analysis-rules.md` 124행 "근거가 없음" 문구를 "요청 주체를 판단할 근거가 없음"으로 명확히 하기 (docs 변경, 사용자 확인 후)

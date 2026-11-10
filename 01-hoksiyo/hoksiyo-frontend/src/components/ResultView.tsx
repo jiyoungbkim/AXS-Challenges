@@ -185,7 +185,10 @@ export function ResultView({ feedback, result, meta, onEdit, onNew }: ResultView
                 onToggle={handleToggleItem}
               />
             ))}
-            <QuestionList items={result.items.filter((item) => item.status === 'needs_confirmation')} />
+            <QuestionList
+              items={result.items.filter((item) => item.status === 'needs_confirmation')}
+              sourceOrder={sourceMap.sentences.map((sentence) => sentence.text)}
+            />
             <ReviewPanel validation={validation} unlinked={unlinked} finalErrors={meta.final_errors} />
           </div>
         </div>
