@@ -1,0 +1,130 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "주인공 머리색 밝게 하기와 1장 말풍선 글씨 키우기 두 가지 수정 요청이 있고, 의상은 유지 지시입니다.",
+      "total_items": 2,
+      "actionable_count": 2,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요."
+        ],
+        "request": "주인공 머리색을 지금보다 더 밝게 조정해 달라는 요청입니다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "머리색을 밝게 하라는 대상은 명확하지만 '좀 더 밝게'라는 정도가 정해지지 않아 소폭 명도 상향으로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "주인공 머리색을 좀 더 밝게 해주시고, 1장 삽화 말풍선 글씨는 키워주세요.",
+          "모바일에서 보면 너무 작아서 안 읽혀요."
+        ],
+        "request": "1장 삽화 말풍선 글씨를 키워 달라는 요청입니다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "말풍선 글씨를 키우라는 방향은 명확하지만 키우는 정도가 정해지지 않아 모바일에서 읽힐 만큼 키우는 것으로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [
+        "의상은 지금 노란 원피스 그대로 두세요."
+      ],
+      "missing_information": [],
+      "notes": [
+        "유지 지시: 의상(노란 원피스)"
+      ]
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [
+          {
+            "cond": 17,
+            "message": "항목 2의 원문에 '좀'이 있어 high로 판정할 수 없습니다. medium 또는 low로 다시 판정하세요."
+          }
+        ],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "high",
+            "status": "actionable"
+          }
+        ]
+      },
+      {
+        "n": 2,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          },
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 515,
+      "output": 888,
+      "cacheRead": 6720,
+      "cacheWrite": 0,
+      "totalTokens": 8123,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 16719
+  },
+  "usage": {
+    "neurons": 587,
+    "basis": "measured",
+    "daily_used": 1190,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 19.837,
+  "_started_utc": "2026-11-09T22:14:20.861Z",
+  "_used_before": 603.733266,
+  "_W": 3000
+}

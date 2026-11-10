@@ -1,0 +1,89 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "저자 이름을 조금 작게 해달라는 수정 요청입니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저자 이름만 조금 작게 해주세요."
+        ],
+        "request": "저자 이름의 크기를 소폭 줄여달라는 요청",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름 크기 축소라는 대상과 방향은 명확하지만 '조금'이라는 정도가 정해지지 않았습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": [
+        "소폭 축소로 가정하고 진행합니다."
+      ]
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 226,
+      "output": 212,
+      "cacheRead": 3072,
+      "cacheWrite": 0,
+      "totalTokens": 3510,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 2254
+  },
+  "usage": {
+    "neurons": 193,
+    "basis": "measured",
+    "daily_used": 1666,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 5.763,
+  "_started_utc": "2026-11-10T05:28:20.414Z",
+  "_used_before": 1473.372586,
+  "_W": 2200
+}

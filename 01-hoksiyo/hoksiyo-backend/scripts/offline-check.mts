@@ -14,7 +14,7 @@ import { assemble } from '../src/analysis/assemble.ts';
 import { LlmAnalysisSchema } from '../src/analysis/llm-schema.ts';
 import { buildAnalysisPrompt } from '../src/analysis/prompt.ts';
 import { splitSentences } from '../src/analysis/sentences.ts';
-import { validate } from '../src/analysis/validate.ts';
+import { findMisquotes, validate } from '../src/analysis/validate.ts';
 import { charge, maxSentences, readUsageConfig, worstCase } from '../src/usage/budget.ts';
 
 const VARS = {
@@ -151,6 +151,13 @@ for (const extra of [{ mode: 'C' }, { model: '@cf/zai-org/glm-5.3' }]) {
 	check(`unknown field ${Object.keys(extra)[0]} → 400 invalid_input`, res.status === 400 && body.error === 'invalid_input');
 }
 check('reserve not called for unknown fields', reserves === 1);
+
+// 6. Misquote warning: quotes in summary/confidence_reason/missing_information must come from the feedback or prior feedback.
+const quoting = (reason: string) => ({ ...a1, items: [{ ...a1.items[0], confidence_reason: reason }] });
+const miss = findMisquotes(quoting("'제목보다 작게' 하고 '저자 이름은 조금 작게'"), cases.T01);
+check('misquote: only the invented quote is flagged', miss.length === 1 && miss[0].quote === '제목보다 작게' && miss[0].field === 'confidence_reason');
+check('misquote: a quote from the prior feedback passes', findMisquotes(quoting("'제목보다 먼저 눈에 들어와요'"), cases.T09).length === 0);
+check('misquote shows up in validate warnings', validate(quoting("'제목보다 작게'"), cases.T01).warnings.some((w) => w.includes('제목보다 작게')));
 
 console.log(ok ? 'ALL OK' : 'SOME FAILED');
 process.exit(ok ? 0 : 1);

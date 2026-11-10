@@ -1,0 +1,93 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "구체적인 수정 대상이나 방법 없이 전체 재작업을 요청하는 피드백입니다.",
+      "total_items": 1,
+      "actionable_count": 0,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "음... 다시 해주세요."
+        ],
+        "request": "다시 해 달라는 요청이지만 무엇을 왜 다시 해야 하는지 이유와 구체적 수정 방향이 없습니다.",
+        "requester": "unknown",
+        "requester_status": "unconfirmed",
+        "interpretations": [],
+        "confidence": "low",
+        "confidence_reason": "수정 대상과 방향이 전혀 언급되지 않아 텍스트만으로 무엇을 고쳐야 하는지 특정할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "어떤 부분이 마음에 들지 않으신지, 전체를 다시 그려드릴까요, 아니면 특정 부분만 수정해 드릴까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "수정 대상(어느 부분이 마음에 들지 않은지)",
+        "수정 방향이나 이유",
+        "재작업 범위(전체 재작업인지 특정 부분 수정인지)"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 573,
+      "output": 683,
+      "cacheRead": 6656,
+      "cacheWrite": 0,
+      "totalTokens": 7912,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 14191
+  },
+  "usage": {
+    "neurons": 509,
+    "basis": "measured",
+    "daily_used": 3686,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 20.809,
+  "_started_utc": "2026-11-09T22:16:22.269Z",
+  "_used_before": 3176.335972,
+  "_W": 2200
+}

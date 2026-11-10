@@ -1,0 +1,87 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《밤의 정원》 표지"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "이전 피드백에서 언급된 저자 이름 크기 축소 요청을 다시 상기시키는 수정 요청입니다.",
+      "total_items": 1,
+      "actionable_count": 1,
+      "confirmation_count": 0
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "저번에 말씀드린 대로 저자 이름은 작게 부탁드려요."
+        ],
+        "request": "저자 이름을 이전 피드백에서 말한 대로 제목보다 덜 눈에 띄도록 작게 줄여 달라는 요청입니다.",
+        "requester": "편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "medium",
+        "confidence_reason": "저자 이름이라는 대상과 작게 줄이라는 방향은 명확하지만 '작게'의 정도가 정해지지 않아 소폭 축소로 가정했습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "matched",
+        "questions": []
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [],
+      "notes": []
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "medium",
+            "status": "actionable"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 277,
+      "output": 319,
+      "cacheRead": 3072,
+      "cacheWrite": 0,
+      "totalTokens": 3668,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 3106
+  },
+  "usage": {
+    "neurons": 243,
+    "basis": "measured",
+    "daily_used": 2850,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 8.812,
+  "_started_utc": "2026-11-10T05:28:50.564Z",
+  "_used_before": 2606.745654,
+  "_W": 2200
+}

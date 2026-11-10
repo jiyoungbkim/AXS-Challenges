@@ -154,6 +154,41 @@ export function validate(result: AnalysisResult, input: AnalysisInput): Validati
 		if (item.confidence === 'high' && count > 0) warnings.push(`항목 ${item.id}: high인데 interpretations 있음`);
 	}
 	if (validation.unmatched_text.length > 0) warnings.push('unmatched_text가 비어 있지 않음');
+	for (const { field, item, quote } of findMisquotes(result, input)) {
+		warnings.push(`${item ? `항목 ${item}: ` : ''}${field}의 인용이 원문·이전 피드백에 없음 "${quote}"`);
+	}
 
 	return { errors, warnings };
+}
+
+export type QuotedField = 'summary' | 'confidence_reason' | 'missing_information';
+
+export interface Misquote {
+	field: QuotedField;
+	item?: number;
+	quote: string;
+}
+
+const QUOTE = /['‘]([^'’]+)['’]|["“]([^"”]+)["”]/g;
+
+function compact(text: string): string {
+	return text.replace(/\s+/g, '');
+}
+
+// Quoted spans that appear in neither the feedback nor the prior feedback
+// (whitespace ignored). Questions are left out: their options are often
+// quoted for emphasis, not from the source.
+export function findMisquotes(result: AnalysisResult, input: AnalysisInput): Misquote[] {
+	const sources = [input.feedback, input.prior_feedback ?? ''].map(compact);
+	const texts: { field: QuotedField; item?: number; text: string }[] = [
+		{ field: 'summary', text: result.analysis.summary },
+		...result.items.map((item) => ({ field: 'confidence_reason' as const, item: item.id, text: item.confidence_reason })),
+		...result.validation.missing_information.map((text) => ({ field: 'missing_information' as const, text })),
+	];
+	return texts.flatMap(({ text, ...where }) =>
+		[...text.matchAll(QUOTE)]
+			.map((match) => match[1] ?? match[2])
+			.filter((quote) => !sources.some((source) => source.includes(compact(quote))))
+			.map((quote) => ({ ...where, quote })),
+	);
 }

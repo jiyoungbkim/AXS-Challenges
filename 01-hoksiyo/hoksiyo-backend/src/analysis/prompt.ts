@@ -29,9 +29,10 @@ summary, request, interpretations, confidence_reason, questions는 모두 한국
    - 요청일 수 있으나 연결하지 못한 문장 번호만 unmatched_text에 넣는다.
 5. request는 의뢰인이 말한 문제나 목표 수준으로 쓴다. 해석을 하나로 단정하지 않는다.
 6. requester와 requester_status
+   - requester는 누가 요청했는지만 본다. 요청 내용이 모호하거나 대상이 불명이어도 requester 판정과는 무관하다.
    - 제3자를 언급하면(마케팅팀에서, 대표님이) 그 주체, identified.
    - 제3자 언급 없이 전달자 본인의 의견이고 [프로젝트]의 전달자를 알면 그 전달자 값을 그대로 쓰고, identified.
-   - 근거가 없거나 전달자가 "알 수 없음"이면 "unknown", unconfirmed.
+   - 요청 주체를 판단할 근거가 없거나 전달자가 "알 수 없음"이면 "unknown", unconfirmed.
 7. confidence(해석의 명확성)
    - high: 수정 대상과 방향이 모두 명확하고 해석이 하나로 좁혀짐.
    - medium: 대상은 명확하지만 방법이나 정도가 정해지지 않음, 또는 이전 요청을 참조하는데 이전 피드백이 없어 대조할 수 없음.

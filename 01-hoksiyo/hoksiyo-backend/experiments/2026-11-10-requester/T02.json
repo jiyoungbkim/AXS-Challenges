@@ -1,0 +1,148 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "주인공의 어른스러운 인상, 3장 삽화의 쓸쓸한 분위기 추가, 특정 부분이 비어 보이는 문제 등 세 가지 수정 요청이 있는 피드백입니다. 세 요청 모두 구체적 수정 방법이나 위치가 명시되지 않아 확인이 필요합니다.",
+      "total_items": 3,
+      "actionable_count": 0,
+      "confirmation_count": 3
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "주인공이 너무 어른스러워 보여요."
+        ],
+        "request": "주인공이 어른스러워 보이지 않고 나이에 맞게 보이도록 수정이 필요하다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [
+          "주인공의 외형(비율, 얼굴 형태 등)을 아동답게 수정해야 한다",
+          "주인공의 표정이나 자세를 어린이답게 바꿔야 한다",
+          "복장이나 행동 묘사에서 아이다움을 강조해야 한다"
+        ],
+        "confidence": "low",
+        "confidence_reason": "주인공이 어른스러워 보인다는 문제 현상만 제시되었고 어느 삽화의 어떤 요소(표정, 비율, 자세 등)를 어떻게 고칠지가 정해지지 않아 있습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "주인공이 어른스러워 보이는 부분이 어디인지, 외형·표정·자세 중 무엇을 수정하면 될까요?"
+        ]
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 3장 삽화는 뭔가 쓸쓸한 느낌이 더 났으면 좋겠어요."
+        ],
+        "request": "3장 삽화에 쓸쓸한 느낌이 더해지면 좋겠다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [
+          "색조나 명암을 차분하게 조정해 쓸쓸함을 강조한다",
+          "배경 요소를 줄이거나 공간을 비워 쓸쓸한 분위기를 만든다",
+          "주인공의 표정이나 구도를 고립감이 느껴지게 바꾼다"
+        ],
+        "confidence": "low",
+        "confidence_reason": "'뭔가 쓸쓸한 느낌'이라는 모호한 분위기 요청으로 구체적 방법이나 정도가 정해지지 않았습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "3장 삽화에서 쓸쓸한 느낌을 더할 방향을 색감·구도·배경 중 어느 쪽으로 생각하시나요?"
+        ]
+      },
+      {
+        "id": 3,
+        "original_text": [
+          "여기 이 부분은 좀 비어 보이는데..."
+        ],
+        "request": "특정 부분이 비어 보여 채워 달라.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [
+          "구도상 빈 공간에 배경 요소를 추가해야 한다",
+          "주변과 어울리는 디테일을 채워 넣어야 한다",
+          "공간 자체를 활용한 의도적 여백이 아니라서 균형을 다시 잡아야 한다"
+        ],
+        "confidence": "low",
+        "confidence_reason": "'여기 이 부분'이라는 지시어로 어떤 삽화의 어느 영역이 비어 보이는지 텍스트만으로 특정할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "비어 보이는 부분이 어디인지 시안을 보며 짚어주실 수 있을까요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "어른스러워 보이는 주인공의 구체적 수정 대상(외형, 표정, 자세 등)",
+        "3장 삽화의 쓸쓸한 느낌을 더할 구체적 방법",
+        "'여기 이 부분'이 가리키는 삽화와 위치",
+        "이전 피드백 없음"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          },
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 405,
+      "output": 1082,
+      "cacheRead": 3008,
+      "cacheWrite": 0,
+      "totalTokens": 4495,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 11972
+  },
+  "usage": {
+    "neurons": 560,
+    "basis": "measured",
+    "daily_used": 1129,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 15.106,
+  "_started_utc": "2026-11-10T05:27:56.264Z",
+  "_used_before": 569.2999050000001,
+  "_W": 3000
+}

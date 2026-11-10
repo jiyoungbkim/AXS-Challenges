@@ -125,4 +125,8 @@
   `deleted_classes: ["FlueHelloAgent"]` 추가. 이때 "작업 규칙"의 "hello.ts는 파일을 삭제하지 않는다" 문구도 함께 갱신한다.
 - 질문 복사 형식
 - 원문 강조(형광) 번짐
-- 판정 안정성: 같은 피드백에 다른 판정이 나오는 경우
+- 판정 안정성: 같은 피드백에 다른 판정이 나오는 경우. 11/10 측정: confidence·status는 stability 4케이스×2회와 회귀 T01~T10에서 모두 기대값과 일치하고 회차 간 같음. 반복 횟수는 적음
+- 판정 외 필드 위치: T04 가정한 정도가 confidence_reason이 아닌 notes에 들어감, T01 notes에 칭찬 처리 설명, T10 #2 confidence_reason이 다른 항목의 표현('좀 더')을 근거로 인용
+- `docs/analysis-rules.md` 124행 "근거가 없음" 문구를 "요청 주체를 판단할 근거가 없음"으로 명확히 하기 (docs 변경, 사용자 확인 후)
+- 조건 17 첫 시도 정확도: 프롬프트 39행 보강 (제안 3-a)
+- 인용 불일치를 오류(재시도)로 올릴지: 테스트 기간 warning 빈도를 보고 결정. 배포 로그(observability.logs)는 켜지 않음. 빈도는 테스트 뒤 run-cases로 확인

@@ -1,0 +1,116 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《작은 가게의 하루》 삽화"
+    },
+    "feedback_context": {
+      "channel": "email",
+      "sender": "출판사 편집자"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "2장 삽화의 하늘 색 변경 요청과 왼쪽 부분의 답답함 지적이 있는 수정 피드백입니다.",
+      "total_items": 2,
+      "actionable_count": 1,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "2장 삽화의 하늘 색을 노을빛 주황으로 바꿔주세요."
+        ],
+        "request": "2장 삽화의 하늘 색을 노을빛 주황으로 변경해 주세요.",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "high",
+        "confidence_reason": "수정 대상(2장 삽화 하늘 색)과 방향(노을빛 주황)이 모두 명확하게 지정되어 있습니다.",
+        "status": "actionable",
+        "prior_feedback_reference": "not_applicable",
+        "questions": []
+      },
+      {
+        "id": 2,
+        "original_text": [
+          "그리고 여기 왼쪽 부분이 좀 답답해 보이네요."
+        ],
+        "request": "왼쪽 부분이 답답해 보여서 개선이 필요합니다.",
+        "requester": "출판사 편집자",
+        "requester_status": "identified",
+        "interpretations": [
+          "왼쪽 구성 요소를 축소하거나 배치를 조정해 여백을 확보한다",
+          "왼쪽 색상이나 명암을 밝게 처리해 시각적으로 연다",
+          "왼쪽을 가리는 요소를 제거해 트임을 준다"
+        ],
+        "confidence": "low",
+        "confidence_reason": "'여기'라는 지시어와 '좀 답답해 보이네요'라는 현상만 언급되어 수정 대상과 방법을 텍스트만으로 특정할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "답답하게 보이는 '여기 왼쪽 부분'이 구체적으로 삽화의 어느 영역인지 시안을 보며 짚어 주시겠어요?",
+          "왼쪽 부분을 여는 방향으로는 구성 요소 축소·배치 조정, 색·명암 밝게 처리, 가리는 요소 제거 중 어느 쪽에 가까운가요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "'여기 왼쪽 부분'이 가리키는 구체적 영역(어떤 요소 또는 위치)",
+        "답답함을 개선하기 위한 원하는 방향(여백 확보, 밝은 색·명암, 요소 제거 등)"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "high",
+            "status": "actionable"
+          },
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 388,
+      "output": 637,
+      "cacheRead": 2944,
+      "cacheWrite": 0,
+      "totalTokens": 3969,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 4354
+  },
+  "usage": {
+    "neurons": 382,
+    "basis": "measured",
+    "daily_used": 1573,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 8.694,
+  "_started_utc": "2026-11-09T22:14:40.715Z",
+  "_used_before": 1190.463781,
+  "_W": 2600
+}

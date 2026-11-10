@@ -1,0 +1,93 @@
+{
+  "analysis": {
+    "schema_version": "1.0",
+    "project": {
+      "name": "《할머니의 여름》 삽화"
+    },
+    "feedback_context": {
+      "channel": "messenger",
+      "sender": "독립출판 작가"
+    },
+    "analysis": {
+      "input_type": "revision_feedback",
+      "summary": "수정 대상과 이유 없이 전체적으로 다시 그려달라는 요청만 있는 피드백입니다.",
+      "total_items": 1,
+      "actionable_count": 0,
+      "confirmation_count": 1
+    },
+    "items": [
+      {
+        "id": 1,
+        "original_text": [
+          "음... 다시 해주세요."
+        ],
+        "request": "제출된 삽화를 다시 그려달라는 요청. 구체적인 수정 방향이나 이유는 제시되지 않았습니다.",
+        "requester": "독립출판 작가",
+        "requester_status": "identified",
+        "interpretations": [],
+        "confidence": "low",
+        "confidence_reason": "다시 그려달라는 요청은 분명하지만 무엇을 어떻게 고쳐야 하는지 전혀 언급되지 않아 수정 대상을 특정할 수 없습니다.",
+        "status": "needs_confirmation",
+        "prior_feedback_reference": "not_applicable",
+        "questions": [
+          "어떤 부분이 마음에 들지 않아 다시 요청하신 건가요? (예: 구도, 캐릭터 표정, 색감, 전체 분위기 등)",
+          "전체 삽화를 처음부터 다시 그리기를 원하시나요, 아니면 특정 부분만 수정하기를 원하시나요?"
+        ]
+      }
+    ],
+    "validation": {
+      "unmatched_text": [],
+      "non_request_text": [],
+      "missing_information": [
+        "어떤 삽화 또는 어떤 부분을 다시 그려야 하는지",
+        "마음에 들지 않은 이유나 개선 방향"
+      ],
+      "notes": []
+    }
+  },
+  "meta": {
+    "model": "@cf/zai-org/glm-5.3",
+    "thinking": "low",
+    "attempts": [
+      {
+        "n": 1,
+        "errors": [],
+        "judgments": [
+          {
+            "confidence": "low",
+            "status": "needs_confirmation"
+          }
+        ]
+      }
+    ],
+    "final_errors": [],
+    "warnings": [],
+    "outcome": "finished",
+    "usage": {
+      "input": 96,
+      "output": 366,
+      "cacheRead": 3200,
+      "cacheWrite": 0,
+      "totalTokens": 3662,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    },
+    "duration_ms": 5121
+  },
+  "usage": {
+    "neurons": 243,
+    "basis": "measured",
+    "daily_used": 3741,
+    "daily_limit": 9000
+  },
+  "_http": "200",
+  "_elapsed_s": 11.645,
+  "_started_utc": "2026-11-10T05:39:39.526Z",
+  "_used_before": 3498.288614,
+  "_W": 2200
+}

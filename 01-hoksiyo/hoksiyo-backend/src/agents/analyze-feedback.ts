@@ -14,7 +14,7 @@ import { assemble, type AnalysisResult } from '../analysis/assemble.ts';
 import { buildResultSchema, type Judgment } from '../analysis/llm-schema.ts';
 import { ANALYSIS_MODEL, ANALYSIS_THINKING, cloudflareModel, MAIN_TURN_MODEL, type Thinking } from '../analysis/models.ts';
 import { buildAnalysisPrompt } from '../analysis/prompt.ts';
-import { validate, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
+import { findMisquotes, validate, type AnalysisInput, type ValidationError } from '../analysis/validate.ts';
 
 const MAX_FAILED_FINISH_CALLS = 3;
 const HARNESS_TIMEOUT_MS = 180_000;
@@ -54,6 +54,11 @@ interface ModelOptions {
 function finalize(input: AnalysisInput, analysis: AnalysisResult | undefined, meta: RunResult['meta']): RunResult {
 	if (!analysis) return { meta };
 	const report = validate(analysis, input);
+	// Worker log for counting misquotes in deploys: the kind and field only,
+	// never the quote, the feedback, or the project name.
+	for (const { field } of findMisquotes(analysis, input)) {
+		console.log(JSON.stringify({ event: 'analysis_warning', kind: 'misquote', field }));
+	}
 	return { analysis, meta: { ...meta, final_errors: report.errors, warnings: report.warnings } };
 }
 
