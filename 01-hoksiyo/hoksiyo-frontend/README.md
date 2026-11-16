@@ -1,32 +1,8 @@
-# React + TypeScript + Vite
+# hoksiyo-frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+혹시요의 웹 화면과 프론트 Worker입니다.
 
-Currently, two official plugins are available:
+- 화면: 접속 코드 입력, 프로젝트명·피드백 입력, 분석 결과(작업 목록·확인 필요 항목·확인 질문)
+- Worker: 접속 코드를 확인하고, 분석 요청을 `BACKEND` service binding으로 백엔드(`hoksiyo-backend`)에 전달합니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+실행 방법은 [상위 README](../README.md#로컬에서-실행하기)를 참고하세요.
