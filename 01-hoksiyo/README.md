@@ -5,6 +5,7 @@
 ## 바로 써 보기
 
 - 배포 주소: https://hoksiyo-frontend.jiyoungbkim.workers.dev/
+- 접속 코드: 398d00c184a9
 - 테스트 가이드: [TESTING.md](./TESTING.md)
 - 데모 영상: https://imgur.com/a/vfoCmcY
 
